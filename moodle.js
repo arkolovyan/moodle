@@ -59,9 +59,10 @@ function appendTipDiv(elem){
       div.load(getPath(elem.attr('srcUrl')));
    else if (elem.attr('childclass'))
       $('.'+elem.attr('childclass')).css('display','inline-block').appendTo(div);
-   else if (elem.attr('data-child'))
-      $('#'+elem.attr('data-child')).css('display','inline-block').appendTo(div);
-
+   else if (elem.attr('data-child')){
+     alert(elem.attr('data-child'));
+     $('#'+elem.attr('data-child')).css('display','inline-block').appendTo(div);
+   }
    if(elem.attr('tooltipFooter'))
       $('<p align="center" />')
       .css({'background-color':'palegreen','color':'black'})
