@@ -19,7 +19,7 @@ function appendStyles(selector,styles){
 
 //************ Tool Tips********
 function applyToolTips(){
-   $('.tooltipImage,.tooltipText,.tooltipChild,.tooltipEquation,.tooltipUrl')
+   $('.tooltipImage,.tooltipText,.tooltipChild,.tooltipEquation,.tooltipUrl,.tooltipParent')
     .each(function(){appendTipDiv($(this))});
 }
 
