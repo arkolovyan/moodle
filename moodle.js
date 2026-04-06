@@ -49,23 +49,23 @@ function appendTipDiv(elem){
 
    if (elem.hasClass('tooltipImage'))
       $('<img alt="" />')
-        .attr('src',getPath(elem.attr('imgsrc')))
+        .attr('src',getPath(elem.attr('data-imgsrc')))
         .appendTo(div);
    else if (elem.hasClass('tooltipText'))
-      div.html(elem.attr('poptext'));            
+      div.html(elem.attr('data-poptext'));            
    else if (elem.hasClass('tooltipEquation'))
-      div.html('\\(\\displaystyle '+elem.attr('poptext')+'\\)');
+      div.html('\\(\\displaystyle '+elem.attr('data-poptext')+'\\)');
    else if (elem.hasClass('tooltipUrl'))
-      div.load(getPath(elem.attr('srcUrl')));
-   else if (elem.attr('childclass'))
-      $('.'+elem.attr('childclass')).css('display','inline-block').appendTo(div);
+      div.load(getPath(elem.attr('data-srcUrl')));
+   else if (elem.attr('data-childclass'))
+      $('.'+elem.attr('data-childclass')).css('display','inline-block').appendTo(div);
    else if (elem.attr('data-child')){
      $('#'+elem.attr('data-child')).css('display','inline-block').appendTo(div);
    }
-   if(elem.attr('tooltipFooter'))
+   if(elem.attr('data-tooltipFooter'))
       $('<p align="center" />')
       .css({'background-color':'palegreen','color':'black'})
-      .html(elem.attr('tooltipFooter')).appendTo(div);
+      .html(elem.attr('data-tooltipFooter')).appendTo(div);
 
    elem.css({'color':'magenta','cursor':'pointer'})
        .mouseenter(function(){showToolTip(elem);})
