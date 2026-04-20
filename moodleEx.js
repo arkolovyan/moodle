@@ -16,7 +16,6 @@
             for (const el of elements) {
                 el.style.cssText = style;
             }
-
         }
         function appendStyle(selector, style, value) {
             const elements = document.querySelectorAll(selector);
@@ -31,25 +30,6 @@
             }
         }
         //************ Tool Tips and PopUp dialog ********
-        //script:
-        //document.addEventListener('DOMContentLoaded', function () {
-        //    applyToolTips();
-        //    applyPopUp();
-        //});
-        //markup examples:
-        //*********простой текст - toolTip*****/
-        //<p>This is <span class='tooltipOwner' data-text='Содержимое' data-caption="Заголовок" data-footer="Подпись">ToolTip</span> owner</p>
-        //*********HTML - toolTip*****/
-        //<p>This is <span class='tooltipOwner' data-html='<img src="https://www.msun.ru/assets/img/fac/fac-sudovod-col.svg"/>' data-caption='Заголовок' data-footer="Footer">Image ToolTip</span> owner</p>
-        //*********HTML - popUp*****/
-        //<p>This is <span class='popupOwner' data-html='<img src="https://www.msun.ru/upload/images/prospect/207.jpg"/>' data-caption='Заголовок' data-footer="Подпись">Image PopUp</span> owner</p>
-        //*********дочерний div - toolTip*****/
-        //<div id='tooltipChild_1' style='display:none;'>
-        //   тут InnerHTML (содержимое в виде HTML разметки)
-        //</div>
-        //<p>This is <span class='tooltipOwner' data-childid='tooltipChild_1' data-caption="Заголовок" data-footer="Подпись">ToolTip</span> owner</p>
-        //*********Url - popUp*****/
-        //<p>This is <span class='popupOwner' data-url='https://www.msun.ru/' data-width='800px' data-caption='Заголовок' data-footer="Подпись">Image PopUp</span> owner</p>
         function applyToolTips() {
             const elements = document.querySelectorAll('.tooltipOwner');
             for (const el of elements) {
@@ -152,7 +132,7 @@
             div.title = '';
             if (selector == '.popUpDiv') {
                 centerDialog(div);
-                return
+                return;
             }
             var rc = elem.getBoundingClientRect(),
                 popTop = rc.top - div.offsetHeight - 5,
@@ -166,9 +146,7 @@
         }
         function hidePopUp(elem, selector) {
             var div = elem.querySelector(selector);
-            if (div) {
-                div.style.display = 'none';
-            }
+            if (div) div.style.display = 'none';
         }
         function centerDialog(box) {
             box.style.top = '50%';
@@ -181,47 +159,6 @@
         function randomId(length = 6) {
             return Math.random().toString(36).substring(2, length + 2);
         };
-        //************ Latidute/Longitude input ********
-        //script:
-        //var content = document.currentScript.closest('div.content');
-        //document.addEventListener('DOMContentLoaded', function () {
-        //    if (!content) return;
-        //    const latitudes = content.querySelector('span.latitude'),
-        //        longitudes = content.querySelector('span.longitude'),
-        //        answer = content.querySelector('span.answer');
-        //    applyPositionFormat(latitudes, longitudes);
-        //    if (answer) {
-        //        if (latitudes.length > 0) applyPositionInput(answer, 'к N', 'к S');
-        //        else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W');
-        //        return;
-        //    }
-        //    const subquestions = content.querySelectorAll('span.subquestion');
-        //    for (const q of subquestions) {
-        //        if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
-        //        else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
-        //    };
-        //});
-        //Правильный ответ должен в градусах с плавающей точкой
-        //markup:
-        //При форматированиии простого числового вопроса:
-        //В тексте вопроса переменные вставить в span с сответствующим классом, например:
-        /*<p>Рассчитать разность долгот между точками с координатам
-            λ<sub>1</sub> = <strong><span class="longitude">{l1}</span></strong> и
-            λ<sub>2</sub> = <strong><span class="longitude">{l2}</span></strong></p> */
-        //При форматировании сложного (cloze) вопроса:
-        //Для ответов использовать таблицу, в соответствующие ячейки добавит классы latitude/longitude, например:
-        /*<tr>
-            <td><strong>φ<sub>v</sub></strong> =</td>
-            <td class="latitude">{:NM:%100%37.6231871636269:0.01#Оценка -
-                отлично~%67%37.6231871636269:0.03#Оценка -
-                хорошо~%33%37.6231871636269:0.06#Оценка - удовлетворительно}</td>
-         </tr>
-         <tr>
-            <td><strong>λ<sub>v</sub></strong> =</td>
-            <td class="longitude">{:NM:%100%-25.5711716978266:0.01#Оценка -
-                отлично~%67%-25.5711716978266:0.03#Оценка -
-                хорошо~%33%-25.5711716978266:0.06#Оценка - удовлетворительно}</td>
-        </tr> */
         function applyPositionInput(answerContainer, positive, negative) {
             var input = answerContainer.querySelector('input'),
                 select = document.createElement('select'),
@@ -357,12 +294,6 @@
             return rhumbs[Math.round(((360 + val) % 360) * rhumbs.length / 360)];
         }
         //************ Time input ********
-        //script:
-        //var content = document.currentScript.closest('div.content');
-        //document.addEventListener('DOMContentLoaded', function () {
-        //    if (!content) return;
-        //    applyTimeInput();
-        //});
         //Правильный ответ должен в часах с плавающей точкой
         function formatTime(value, separator = ':') {
             var v = parseFloat(value.toString().replace(",", "."));
