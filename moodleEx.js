@@ -169,8 +169,7 @@ function numericQuestion(qType) {
             longitudes = content.querySelector('span.longitude');
         applyPositionFormat(latitudes, longitudes);
         if (latitudes.length > 0)  applyPositionInput(answer, 'к N', 'к S')
-        else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
-        else return false;
+        else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W');
     } else if (qType === 'time')
         applyTimeInput(answer);
     else return false;
@@ -180,11 +179,10 @@ function clozeQuestion(qType) {
     const subquestions = content.querySelectorAll('span.subquestion');
     if (subquestions.length == 0) return false;
     for (const q of subquestions) {
-        if (qType === 'position') {
+        if (qType == 'position') {
             alert(q.parentNode.className);
             if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
             else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
-            else return false;
         } else if (qType == 'time')
             applyTimeInput(q);
         else return false;
