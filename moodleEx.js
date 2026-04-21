@@ -175,18 +175,17 @@ function numericQuestion(qType) {
     else return false;
     return true;
 }
-function clozeQuestion(qType) {
+function clozeQuestion() {
     const subquestions = content.querySelectorAll('span.subquestion');
     if (subquestions.length == 0) return false;
+    var n = 0;
     for (const q of subquestions) {
-        if (qType == 'position') {
-            if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
-            else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
-        } else if (qType == 'time')
-            applyTimeInput(q);
-        else return false;
+        if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S')
+        else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W')
+        else if (q.parentNode.className == 'time') applyTimeInput(q)
+        else n += 1;
     }
-    return true;
+    return (n < subquestions.length);
 }
 //Position input
 //Правильный ответ должен быть в градусах с плавающей точкой
