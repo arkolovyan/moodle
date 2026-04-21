@@ -154,11 +154,40 @@
             box.style.transform = 'translate(-50%, -50%)';
         }
         //***************************************
-
         //************ Test questions UI ********
+        //***************************************
         function randomId(length = 6) {
             return Math.random().toString(36).substring(2, length + 2);
         };
+        function numericQuestion(qType) {
+            const answer = content.querySelector('span.answer');
+            if (!answer) return false;
+            if (qType == 'position') {
+                const latitudes = content.querySelector('span.latitude'),
+                    longitudes = content.querySelector('span.longitude');
+                applyPositionFormat(latitudes, longitudes);
+                if (latitudes.length > 0) applyPositionInput(answer, 'к N', 'к S')
+                else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
+                else return false;
+            } else if (qType == 'time')
+                applyTimeInput(answer);
+            return true;
+        }
+        function clozeQuestion(qType) {
+            const subquestions = content.querySelectorAll('span.subquestion');
+            if (subquestions.length == 0) return false;
+            for (const q of subquestions) {
+                if (qType == 'position') {
+                    if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S')
+                    else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W')
+                    else return false;
+                } else if (qType == 'time')
+                    applyTimeInput(q);
+            }
+            return true;
+        }
+        //Position input
+        //Правильный ответ должен быть в градусах с плавающей точкой
         function applyPositionInput(answerContainer, positive, negative) {
             var input = answerContainer.querySelector('input'),
                 select = document.createElement('select'),
@@ -294,7 +323,7 @@
             return rhumbs[Math.round(((360 + val) % 360) * rhumbs.length / 360)];
         }
         //************ Time input ********
-        //Правильный ответ должен в часах с плавающей точкой
+        //Правильный ответ должен быть в часах с плавающей точкой
         function formatTime(value, separator = ':') {
             var v = parseFloat(value.toString().replace(",", "."));
             if (isNaN(v) || v < 0 || v > 24) return value;
