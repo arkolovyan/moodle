@@ -168,8 +168,12 @@ function numericQuestion(qType) {
         const latitudes = content.querySelector('span.latitude'),
             longitudes = content.querySelector('span.longitude');
         applyPositionFormat(latitudes, longitudes);
-        if (latitudes.length > 0) applyPositionInput(answer, 'к N', 'к S')
-        else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
+        if (latitudes.length > 0) {
+            applyPositionInput(answer, 'к N', 'к S')
+        }
+        else if {
+            (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
+        }
         else return false;
     } else if (qType === 'time')
         applyTimeInput(answer);
@@ -181,8 +185,12 @@ function clozeQuestion(qType) {
     if (subquestions.length == 0) return false;
     for (const q of subquestions) {
         if (qType === 'position') {
-            if (q.parentNode.className === 'latitude') applyPositionInput(q, 'N', 'S')
-            else if (q.parentNode.className === 'longitude') applyPositionInput(q, 'E', 'W')
+            if (q.parentNode.className == 'latitude') {
+                applyPositionInput(q, 'N', 'S')
+            }
+            else if  (q.parentNode.className == 'longitude') {
+                applyPositionInput(q, 'E', 'W')
+            }
             else return false;
         } else if (qType === 'time')
             applyTimeInput(q);
