@@ -1,4 +1,3 @@
-    <script type="text/javascript">
         //************ Styles ********
         function appendStyleSheet(url) {
             const link = document.createElement('link');
@@ -358,4 +357,3 @@
                 rightAnswer.innerText = s.substring(0, pos) + formatTime(s.substring(pos), ':');
             }
         }
-    </script>
