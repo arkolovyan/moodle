@@ -180,7 +180,6 @@ function clozeQuestion(qType) {
     if (subquestions.length == 0) return false;
     for (const q of subquestions) {
         if (qType == 'position') {
-            alert(q.parentNode.className);
             if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
             else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
         } else if (qType == 'time')
