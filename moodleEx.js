@@ -171,8 +171,8 @@ function numericQuestion(qType) {
         if (latitudes.length > 0) {
             applyPositionInput(answer, 'к N', 'к S')
         }
-        else if {
-            (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
+        else if (longitudes.length > 0) {
+            applyPositionInput(answer, 'к E', 'к W')
         }
         else return false;
     } else if (qType === 'time')
