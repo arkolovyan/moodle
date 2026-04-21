@@ -66,22 +66,8 @@ Popup/dialog window settings are made via data-* attributes:
    var content = document.currentScript.closest('div.content');
    document.addEventListener('DOMContentLoaded', function () {
        if (!content) return;
-       const latitudes = content.querySelector('span.latitude'),
-           longitudes = content.querySelector('span.longitude'),
-           answer = content.querySelector('span.answer');
-       applyPositionFormat(latitudes, longitudes); //format float degrees as deg°min.d'
-       //simple numeric question
-       if (answer) {
-           if (latitudes.length > 0) applyPositionInput(answer, 'N', 'S');
-           else if (longitudes.length > 0) applyPositionInput(answer, 'E', 'W');
-           return;
-       }
-       //multiple answers (cloze) question
-       const subquestions = content.querySelectorAll('span.subquestion');
-       for (const q of subquestions) {
-           if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
-           else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
-       };
+       if (numericQuestion('position')) return;
+       clozeQuestion('position');
    });   
 </script>  
 ```
