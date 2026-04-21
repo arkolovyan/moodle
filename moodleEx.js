@@ -164,7 +164,7 @@ function randomId(length = 6) {
 function numericQuestion(qType) {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
-    if (qType === 'position') {
+    if (qType == 'position') {
         const latitudes = content.querySelector('span.latitude'),
             longitudes = content.querySelector('span.longitude');
         applyPositionFormat(latitudes, longitudes);
@@ -185,10 +185,12 @@ function clozeQuestion(qType) {
     if (subquestions.length == 0) return false;
     for (const q of subquestions) {
         if (qType === 'position') {
+            alert('position');
             if (q.parentNode.className == 'latitude') {
                 applyPositionInput(q, 'N', 'S')
             }
-            else if  (q.parentNode.className == 'longitude') {
+            else if (q.parentNode.className == 'longitude') {
+            alert('longitude');
                 applyPositionInput(q, 'E', 'W')
             }
             else return false;
