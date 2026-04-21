@@ -164,14 +164,14 @@ function randomId(length = 6) {
 function numericQuestion(qType) {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
-    if (qType == 'position') {
+    if (qType === 'position') {
         const latitudes = content.querySelector('span.latitude'),
             longitudes = content.querySelector('span.longitude');
         applyPositionFormat(latitudes, longitudes);
         if (latitudes.length > 0) applyPositionInput(answer, 'к N', 'к S')
         else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W')
         else return false;
-    } else if (qType == 'time')
+    } else if (qType === 'time')
         applyTimeInput(answer);
     else return false;
     return true;
@@ -180,11 +180,11 @@ function clozeQuestion(qType) {
     const subquestions = content.querySelectorAll('span.subquestion');
     if (subquestions.length == 0) return false;
     for (const q of subquestions) {
-        if (qType == 'position') {
-            if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S')
-            else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W')
+        if (qType === 'position') {
+            if (q.parentNode.className === 'latitude') applyPositionInput(q, 'N', 'S')
+            else if (q.parentNode.className === 'longitude') applyPositionInput(q, 'E', 'W')
             else return false;
-        } else if (qType == 'time')
+        } else if (qType === 'time')
             applyTimeInput(q);
         else return false;
     }
