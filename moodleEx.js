@@ -75,13 +75,13 @@ function appendTipDiv(elem, selector) {
         captionText = captionText || ' ';
     }
     appendCaption(div, captionText, captionCSS);
-    if (elem.hasAttribute('data-text')) div.appendChild(getContent(elem.getAttribute('data-text'), text_align, !elem.hasAttribute('data-width')));
+    if (elem.hasAttribute('data-text')) div.appendChild(getContent(elem.getAttribute('data-text'), text_align, !elem.hasAttribute('data-width')))
     else if (elem.hasAttribute('data-html')) {
         div.style.textAlign = text_align;
         div.appendChild(getHtml(elem.getAttribute('data-html')));
     }
-    else if (elem.hasAttribute('data-equation')) div.appendChild(getContent(elem.getAttribute('data-equation')));
-    else if (elem.hasAttribute('data-url')) loadUrl(div, elem.getAttribute('data-url'));
+    else if (elem.hasAttribute('data-equation')) div.appendChild(getContent(elem.getAttribute('data-equation')))
+    else if (elem.hasAttribute('data-url')) loadUrl(div, elem.getAttribute('data-url'))
     else if (elem.hasAttribute('data-childId')) {
         var child = document.getElementById(elem.getAttribute('data-childId'), text_align);
         child.style.display = 'inline-block';
