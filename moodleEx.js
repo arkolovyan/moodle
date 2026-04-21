@@ -182,15 +182,10 @@ function clozeQuestion(qType) {
     for (const q of subquestions) {
         if (qType === 'position') {
             alert(q.parentNode.className);
-            if (q.parentNode.className == 'latitude') {
-                applyPositionInput(q, 'N', 'S')
-            }
-            else if (q.parentNode.className == 'longitude') {
-            alert('longitude');
-                applyPositionInput(q, 'E', 'W')
-            }
+            if (q.parentNode.className == 'latitude') applyPositionInput(q, 'N', 'S');
+            else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'E', 'W');
             else return false;
-        } else if (qType === 'time')
+        } else if (qType == 'time')
             applyTimeInput(q);
         else return false;
     }
