@@ -13,19 +13,19 @@ function appendCSS(cssText) {
 function setStyle(selector, style) {
     const elements = document.querySelectorAll(selector);
     for (const el of elements) {
-el.style.cssText = style;
+        el.style.cssText = style;
     }
 }
 function appendStyle(selector, style, value) {
     const elements = document.querySelectorAll(selector);
     for (const el of elements) {
-el.style.cssText += style + ':' + value;
+        el.style.cssText += style + ':' + value;
     }
 }
 function appendStyles(selector, styles) {
     const elements = document.querySelectorAll(selector);
     for (const el of elements) {
-el.style.cssText += styles;
+        el.style.cssText += styles;
     }
 }
 //************ Tool Tips and PopUp dialog ********
@@ -67,21 +67,18 @@ function appendTipDiv(elem, selector) {
         btn.title = 'Закрыть';
         btn.onmouseenter = function () { btn.style.backgroundColor = 'red' };
         btn.onmouseleave = function () { btn.style.backgroundColor = 'steelblue' };
-        btn.onclick = function (e) { 
-            e.stopPropagation(); 
-            hidePopUp(elem, selector); 
-        }
+        btn.onclick = function (e) { e.stopPropagation(); hidePopUp(elem, selector); }
         div.appendChild(btn);
-        captionText = captionText || ' ';
+        captionText = captionText || ' ';
     }
     appendCaption(div, captionText, captionCSS);
-    if (elem.hasAttribute('data-text')) div.appendChild(getContent(elem.getAttribute('data-text'), text_align, !elem.hasAttribute('data-width')))
+    if (elem.hasAttribute('data-text')) div.appendChild(getContent(elem.getAttribute('data-text'), text_align, !elem.hasAttribute('data-width')));
     else if (elem.hasAttribute('data-html')) {
         div.style.textAlign = text_align;
         div.appendChild(getHtml(elem.getAttribute('data-html')));
     }
-    else if (elem.hasAttribute('data-equation')) div.appendChild(getContent(elem.getAttribute('data-equation')))
-    else if (elem.hasAttribute('data-url')) loadUrl(div, elem.getAttribute('data-url'))
+    else if (elem.hasAttribute('data-equation')) div.appendChild(getContent(elem.getAttribute('data-equation')));
+    else if (elem.hasAttribute('data-url')) loadUrl(div, elem.getAttribute('data-url'));
     else if (elem.hasAttribute('data-childId')) {
         var child = document.getElementById(elem.getAttribute('data-childId'), text_align);
         child.style.display = 'inline-block';
@@ -134,7 +131,7 @@ function showPopUp(elem, selector) {
     div.title = '';
     if (selector == '.popUpDiv') {
         centerDialog(div);
-        return;
+        return
     }
     var rc = elem.getBoundingClientRect(),
         popTop = rc.top - div.offsetHeight - 5,
@@ -148,7 +145,9 @@ function showPopUp(elem, selector) {
 }
 function hidePopUp(elem, selector) {
     var div = elem.querySelector(selector);
-    if (div) div.style.display = 'none';
+    if (div) {
+        div.style.display = 'none';
+    }
 }
 function centerDialog(box) {
     box.style.top = '50%';
@@ -157,7 +156,9 @@ function centerDialog(box) {
 }
 //***************************************
 //************ Test questions UI ********
-//***************************************
+var deg_input_span = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
+    min_input_span = "<input id='min_input_idSuffix' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>",
+    time_input_span = "<input id='time_input_idSuffix' type='time' class='form-control d-inline' style='width:auto'>";
 function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
 };
@@ -184,27 +185,23 @@ function clozeQuestion() {
     }
     return (n < subquestions.length);
 }
-//Position input
-//Правильный ответ должен быть в градусах с плавающей точкой
 function applyPositionInput(answerContainer, positive, negative) {
     var input = answerContainer.querySelector('input'),
         select = document.createElement('select'),
-        idSuffix = '_' + randomId();
-    select.id = 'latlon_sgn' + idSuffix;
+        idSuffix = randomId();
+    select.id = 'latlon_sgn_' + idSuffix;
     select.className += 'select form-select d-inline-block';
     select.add(new Option(positive, '1'));
     select.add(new Option(negative, '-1'));
-    input.insertAdjacentHTML('beforebegin', "<input id='deg_input" + idSuffix +
-"' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>");
+    input.insertAdjacentHTML('beforebegin', deg_input_span.replace('idSuffix',idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
-    input.insertAdjacentHTML('beforebegin', "<input id='min_input" + idSuffix +
-"' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>");
+    input.insertAdjacentHTML('beforebegin', min_input_span.replace('idSuffix', idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>\'</span>");
     input.parentNode.insertBefore(select, input);
     input.style.setProperty('display', 'none', 'important');
-    var input_deg = content.querySelector('#deg_input' + idSuffix),
-        input_min = content.querySelector('#min_input' + idSuffix),
-        select = content.querySelector('#latlon_sgn' + idSuffix);
+    var input_deg = content.querySelector('#deg_input_' + idSuffix),
+        input_min = content.querySelector('#min_input_' + idSuffix),
+        select = content.querySelector('#latlon_sgn_' + idSuffix);
     formatCorrectAnswer(answerContainer, positive, negative);
     if (input.value) {
         var v = parseFloat(input.value.replace(',', '.'));
@@ -224,7 +221,7 @@ function applyPositionInput(answerContainer, positive, negative) {
         select.disabled = true;
     }
     const form = content.closest('#responseform');
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', function() {
         var d = parseInt(input_deg.value),
             m = parseFloat(input_min.value.replace(',', '.')) / 60,
             degs = d + m;
@@ -252,9 +249,20 @@ function formatPosition(value, positive, negative) {
     if ((mins + '').length < 3) mins = mins + '.0';
     return deg + '°' + mins + '\'' + sgn;
 }
+function formatLatitudes() {
+    for (const lat of content.querySelectorAll('span.latitude')) {
+        lat.innerText = formatLatitude(lat.innerText);
+    };
+}
 function formatLatitude(value) {
     return formatPosition(value, 'N', 'S');
 }
+function formatLongitudes() {
+    for (const lon of content.querySelectorAll('span.longitude')) {
+        lon.innerText = formatLongitude(lon.innerText);
+    };
+}
+
 function formatLongitude(value) {
     return formatPosition(value, 'E', 'W');
 }
@@ -264,15 +272,20 @@ function formatCorrectAnswer(answerContainer, positive, negative) {
         var bsContent = popUp.getAttribute('data-bs-content'),
             start = bsContent.indexOf(':') + 1,
             end = bsContent.indexOf('<', start),
-            str_val = bsContent.substring(start, end),
-            val = parseFloat(str_val);
-        popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatPosition(str_val, positive, negative)));
+            str_val = bsContent.substring(start, end);
+        if (positive == 'N' || positive == 'E') // position
+            popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatPosition(str_val, positive, negative)));
+        else if (positive = 'time') //time
+            popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatTime(str_val)));
     } else {
         var rightAnswer = content.querySelector('div.rightanswer');
         if (rightAnswer) {
             var s = rightAnswer.innerText,
                 pos = s.indexOf(':') + 2;
-            rightAnswer.innerText = s.substring(0, pos) + formatPosition(s.substring(pos), positive, negative);
+            if (positive == 'N' || positive == 'E') // position
+                rightAnswer.innerText = s.substring(0, pos) + formatPosition(s.substring(pos), positive, negative);
+            else if (positive = 'time') //time
+                rightAnswer.innerText = s.substring(0, pos) + formatTime(s.substring(pos));
         }
     }
 }
@@ -322,8 +335,7 @@ function replaceNegativeInput(negative) {
 function nearestRhumb(val, rhumbs) {
     return rhumbs[Math.round(((360 + val) % 360) * rhumbs.length / 360)];
 }
-//************ Time input ********
-//Правильный ответ должен быть в часах с плавающей точкой
+//Правильный ответ должен в часах с плавающей точкой
 function formatTime(value, separator = ':') {
     var v = parseFloat(value.toString().replace(",", "."));
     if (isNaN(v) || v < 0 || v > 24) return value;
@@ -343,13 +355,13 @@ function parseTime(value) {
 function applyTimeInput(answerContainer) {
     var input = answerContainer.querySelector('input'),
         rightAnswer = content.querySelector('div.rightanswer'),
-        idSuffix = '_' + randomId();
-    input.insertAdjacentHTML('beforebegin', "<input id='time_input" + idSuffix + "' type='time' class='form-control d-inline' style='width:auto'>");
+        idSuffix = randomId();
+    input.insertAdjacentHTML('beforebegin', time_input_span.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
-    var inp = content.querySelector('#time_input' + idSuffix);
+    var inp = content.querySelector('#time_input_' + idSuffix);
     if (input.value) inp.value = formatTime(input.value, ':');
     const form = content.closest('#responseform');
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', function() {
         input.value = parseTime(inp.value);
     });
     if (rightAnswer) {
