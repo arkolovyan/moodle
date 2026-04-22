@@ -159,6 +159,7 @@ function centerDialog(box) {
 var deg_input_span = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
     min_input_span = "<input id='min_input_idSuffix' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>",
     time_input_span = "<input id='time_input_idSuffix' type='time' class='form-control d-inline' style='width:auto'>";
+
 function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
 };
@@ -354,7 +355,6 @@ function parseTime(value) {
 }
 function applyTimeInput(answerContainer) {
     var input = answerContainer.querySelector('input'),
-        rightAnswer = content.querySelector('div.rightanswer'),
         idSuffix = randomId();
     input.insertAdjacentHTML('beforebegin', time_input_span.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
@@ -364,9 +364,5 @@ function applyTimeInput(answerContainer) {
     form.addEventListener('submit', function() {
         input.value = parseTime(inp.value);
     });
-    if (rightAnswer) {
-        var s = rightAnswer.innerText,
-            pos = s.indexOf(':') + 2;
-        rightAnswer.innerText = s.substring(0, pos) + formatTime(s.substring(pos), ':');
-    }
+    formatCorrectAnswer(answerContainer, 'time');
 }
