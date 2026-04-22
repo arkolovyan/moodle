@@ -164,14 +164,11 @@ function randomId(length = 6) {
 function numericQuestion(qType) {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
-    if (qType == 'position') {
-        const latitudes = content.querySelector('span.latitude'),
-            longitudes = content.querySelector('span.longitude');
-        applyPositionFormat(latitudes, longitudes);
-        if (latitudes.length > 0)  applyPositionInput(answer, 'к N', 'к S')
-        else if (longitudes.length > 0) applyPositionInput(answer, 'к E', 'к W');
-    } else if (qType === 'time')
-        applyTimeInput(answer);
+    if (qType == 'lаtitude') applyPositionInput(answer, 'N', 'S')
+    else if (qType == 'longitude') applyPositionInput(answer, 'E', 'W')
+    else if (qType == 'deltaLat') applyPositionInput(answer, 'к N', 'к S')
+    else if (qType == 'deltaLon') applyPositionInput(answer, 'к E', 'к W')
+    else if (qType == 'time') applyTimeInput(answer)
     else return false;
     return true;
 }
