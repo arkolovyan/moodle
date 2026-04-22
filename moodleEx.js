@@ -232,7 +232,9 @@ function applyPositionInput(answerContainer, positive, negative) {
         input.value = degs;
     });
 }
-function applyPositionFormat(latitudes, longitudes) {
+function applyPositionFormat() {
+    const latitudes = content.querySelectorAll('span.latitude'),
+        longitudes = content.querySelectorAll('span.longitude');
     for (const lat of latitudes) {
         lat.innerText = formatLatitude(lat.innerText);
     };
