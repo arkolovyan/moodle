@@ -201,7 +201,7 @@ function formatValues(tag, className) {
     }
 }
 function formatValue(value, type) {
-    if (isPosition(type)) formatPosition(value, type)
+    if (isPosition(type)) return formatPosition(value, type)
     else if (type == 'time') return formatTime(value);
 }
 function formatPosition(value, type) {
