@@ -167,7 +167,7 @@ function numericQuestion(type) {
     if (!answer) return false;
     if (isPosition(type)) applyPositionInput(answer, type)
     else if (type == 'time') applyTimeInput(answer)
-    else if (type == 'signed') applysignedInput(answer)
+    else if (type == 'signed') applySignedInput(answer)
     else return false;
     return true;
 }
