@@ -346,11 +346,11 @@ var rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW'
     EW = ['E', 'W'];
 
 function createDeviationTable(tag, className) {
-    var table = '<table width="auto" cellspacing="2" cellpadding = "2" ><thead><tr>';
+    var table = '<table width="auto" cellspacing="2" cellpadding = "2" ><thead style="text-align: center;"><tr>';
     for (i = 0; i < 4; i++) {
         table += '<th>KK</th><th>δ</th>';
     }
-    table += '</tr></thead style="text-align: center;"><tbody style="text-align: right;">';
+    table += '</tr></thead><tbody style="text-align: right;">';
     for (i = 0; i < 9; i++) {
         table += '<tr>'
         for (j = 0; j < 4; j++) {
