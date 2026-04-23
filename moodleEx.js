@@ -185,6 +185,7 @@ function clozeQuestion() {
 }
 function isPosition(type) {
     const pos = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
+    return true;
     return (pos.indexOf(type) !== -1);
 }
 function positionLetter(type) {
@@ -203,7 +204,6 @@ function formatValues(tag, className) {
 function formatValue(value, type) {
     if (isPosition(type)) return formatPosition(value, type)
     else if (type == 'time') return formatTime(value);
-    return type;
 }
 function formatPosition(value, type) {
     if (!isPosition(type)) return;
