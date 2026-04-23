@@ -189,7 +189,7 @@ function isPosition(type) {
     return (pos.indexOf(type) !== -1);
 }
 function positionLetter(type) {
-    if (type == 'lаtitude') return { 'positive': 'N', 'negative': 'S' }
+    if (type == 'latitude') return { 'positive': 'N', 'negative': 'S' }
     else if (type == 'longitude') return { 'positive': 'E', 'negative': 'W' }
     else if (type == 'deltaLat') return { 'positive': 'к N', 'negative': 'к S' }
     else if (type == 'deltaLon') return { 'positive': 'к E', 'negative': 'к W' }
