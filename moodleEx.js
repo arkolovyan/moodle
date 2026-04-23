@@ -188,7 +188,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'signed'];
+    const arr = ['quoter', 'semiN', 'semiS','rhumb', 'signed'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
@@ -238,8 +238,9 @@ function formatDirection(value, type) {
         return angle + ' ' + quoters[n];
     }
     else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
-    else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E';
-    else if (type == 'signed') return (v > 0) ? '+' + v : v + '';
+    else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
+    else if (type == 'signed') return (v > 0) ? '+' + v : v + ''
+    else if (type == 'rhumb') return rhumbs[v];
 }
 function formatCorrectAnswer(answerContainer, type) {
     var popUp = answerContainer.querySelector('a');
