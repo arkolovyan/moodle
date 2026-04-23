@@ -184,11 +184,15 @@ function clozeQuestion() {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    const pos = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
-    return (pos.indexOf(type) !== -1);
+    const arr = ['lаtitude', 'longitude', 'deltaLat', 'deltaLon'];
+    return arr.indexOf(type) !== -1;
+}
+function isDirection(type) {
+    const arr = ['quoter', 'semiN', 'semiS', 'signed'];
+    return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
-    if (type == 'latitude') return { 'positive': 'N', 'negative': 'S' }
+    if (type == 'lаtitude') return { 'positive': 'N', 'negative': 'S' }
     else if (type == 'longitude') return { 'positive': 'E', 'negative': 'W' }
     else if (type == 'deltaLat') return { 'positive': 'к N', 'negative': 'к S' }
     else if (type == 'deltaLon') return { 'positive': 'к E', 'negative': 'к W' }
@@ -202,6 +206,7 @@ function formatValues(tag, className) {
 }
 function formatValue(value, type) {
     if (isPosition(type)) return formatPosition(value, type)
+    else if (isDirection(type)) return formatDirection(value, type)
     else if (type == 'time') return formatTime(value);
 }
 function formatPosition(value, type) {
@@ -224,6 +229,17 @@ function formatTime(value, separator = ':') {
     if (hours < 10) hours = '0' + hours;
     if (mins < 10) mins = '0' + mins;
     return hours + separator + mins;
+}
+function formatDirection(value, type) {
+    var v = parseFloat(value.replace(',', '.')); 
+    if (type == 'quoter') {
+        var n = Math.floor(v / 90),
+            angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v;
+        return angle + quoters[n];
+    }
+    else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
+    else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E';
+    else if (type == 'signed') return (v > 0) ? '+' + v : v + '';
 }
 function formatCorrectAnswer(answerContainer, type) {
     var popUp = answerContainer.querySelector('a');
@@ -353,5 +369,3 @@ function replaceNegativeInput(negative) {
 function nearestRhumb(val, rhumbs) {
     return rhumbs[Math.round(((360 + val) % 360) * rhumbs.length / 360)];
 }
-
-
