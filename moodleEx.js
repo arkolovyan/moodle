@@ -278,8 +278,7 @@ function applyPositionInput(answerContainer, type) {
     input.parentNode.insertBefore(select, input);
     input.style.setProperty('display', 'none', 'important');
     let input_deg = content.querySelector('#deg_input_' + idSuffix),
-        input_min = content.querySelector('#min_input_' + idSuffix),
-        select = content.querySelector('#latlon_sgn_' + idSuffix);
+        input_min = content.querySelector('#min_input_' + idSuffix);
     formatCorrectAnswer(answerContainer, type);
     if (input.value) {
         let v = parseFloat(input.value.replace(',', '.'));
