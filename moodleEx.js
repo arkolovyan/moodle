@@ -235,7 +235,7 @@ function formatDirection(value, type) {
     if (type == 'quoter') {
         var n = Math.floor(v / 90),
             angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v;
-        return angle + quoters[n];
+        return angle + ' ' + quoters[n];
     }
     else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E';
