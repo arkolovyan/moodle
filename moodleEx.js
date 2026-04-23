@@ -184,13 +184,10 @@ function clozeQuestion() {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    console.log(type);
     const pos = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
-    console.log(pos.indexOf(type));
     return (pos.indexOf(type) !== -1);
 }
 function positionLetter(type) {
-    console.log(type);
     if (type == 'latitude') return { 'positive': 'N', 'negative': 'S' }
     else if (type == 'longitude') return { 'positive': 'E', 'negative': 'W' }
     else if (type == 'deltaLat') return { 'positive': 'к N', 'negative': 'к S' }
