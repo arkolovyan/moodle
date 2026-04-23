@@ -184,8 +184,8 @@ function clozeQuestion() {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    const pos = ['lаtitude', 'longitude', 'deltaLat', 'deltaLon'];
-    return pos.indexOf(type) !== -1;
+    const pos = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
+    return (pos.indexOf(type) !== -1);
 }
 function positionLetter(type) {
     if (type == 'lаtitude') return { 'positive': 'N', 'negative': 'S' }
@@ -203,6 +203,7 @@ function formatValues(tag, className) {
 function formatValue(value, type) {
     if (isPosition(type)) return formatPosition(value, type)
     else if (type == 'time') return formatTime(value);
+    return type;
 }
 function formatPosition(value, type) {
     if (!isPosition(type)) return;
