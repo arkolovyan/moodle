@@ -366,10 +366,9 @@ function createDeviationTable(tag, className) {
 }
 function getDeviation(kk) {
     kk = kk * Math.PI / 180;
-    var x = 0.2625 - 3.8607 * Math.sin(kk) + 1.012 * cos(kk) + 0.075 * sin(2 * kk) + 0.5 * cos(2 * kk)
-    return math.round(x * 10) / 10;
+    var x = 0.2625 - 3.8607 * Math.sin(kk) + 1.012 * Math.cos(kk) + 0.075 * Math.sin(2 * kk) + 0.5 * Math.cos(2 * kk)
+    return Math.round(x * 10) / 10;
 }
-
 function showSign(id) {
     var value = parseFloat(content.querySelector('#' + id + '_hidden').value);
     if (value > 0) content.querySelector('#' + id).innerText = '+';
