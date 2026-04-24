@@ -338,10 +338,10 @@ function applySignedInput(answerContainer) {
                 alert(v);
                 alert(isNaN(v));
         if (isNaN(v)) return;
-        alert(inp.value);
-        alert(input.value);
         if (v > 0 && !inp.value.starsWith('+')) input.value = 999999
         else input.value = inp.value;
+        alert(inp.value);
+        alert(input.value);
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
