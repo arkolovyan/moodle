@@ -333,10 +333,9 @@ function applySignedInput(answerContainer) {
     if (input.getAttribute('readonly') || input.disabled) {
         inp.disabled = true;
         inp.value = input.value;
-    }
-    else if (input.value) {
+    } else if (input.value) {
         let val = parseFloat(input.value.replace(',','.'));
-        if (val > 0) inp.value = '+' + input.Value;
+        if (val > 0) inp.value = '+' + input.value;
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
