@@ -330,8 +330,8 @@ function applySignedInput(answerContainer) {
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
-    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true
-    else if (input.value) inp.value = input.value;
+    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
+    if (input.value) inp.value = input.value;
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
         let submitter = event.submitter;
