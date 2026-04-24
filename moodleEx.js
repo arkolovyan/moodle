@@ -331,9 +331,9 @@ function applySignedInput(answerContainer) {
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
+    alert(inp.outerHTML);
     if (inp.hasAttribute('data-initial-value')) {
         let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.'));
-            alert(initialVal);
         if (initialVal > 0){
             let s = '+' + initialVal;
             inp.value = s;
