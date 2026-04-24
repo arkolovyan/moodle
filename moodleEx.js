@@ -332,6 +332,7 @@ function applySignedInput(answerContainer) {
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     alert(inp.outerHTML);
+    return;
     if (inp.hasAttribute('data-initial-value')) {
         let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.'));
         if (initialVal > 0){
@@ -350,7 +351,7 @@ function applySignedInput(answerContainer) {
             if (isNaN(v)) input.value = inp.value
             else if (v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
             else input.value = inp.value;
-        }
+        }else if(submitter.name=='fill')  alert('fill' + inp.outerHTML);
         else input.value = inp.value;
     });
     formatCorrectAnswer(answerContainer, 'signed');
