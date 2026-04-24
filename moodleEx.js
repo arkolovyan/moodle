@@ -330,28 +330,22 @@ function applySignedInput(answerContainer) {
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
-    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
-    alert(input.outerHTML);
-    if (inp.hasAttribute('data-initial-value')) {
-        let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.'));
-        if (initialVal > 0){
-            let s = '+' + initialVal;
-            inp.value = s;
-            input.value = s;
-            inp.setAttribute('data-initial-value',s);
-        }
+    if (input.getAttribute('readonly') || input.disabled) {
+        inp.disabled = true;
+        inp.value = input.value;
     }
-    if (input.value) inp.value = input.value;
+    else if (input.value) {
+        let val = parseFloat(input.value.replace(',','.'));
+        if (val > 0) inp.value = '+' + input.Value;
+    }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
         let submitter = event.submitter;
         input.value = inp.value;
         if (submitter.name == 'finish') {
             let v = parseFloat(inp.value.replace(",", "."));
-            if (isNaN(v)) input.value = inp.value
-            else if (v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
-            else input.value = inp.value;
-        }else if(submitter.name=='fill')  alert('fill' + input.outerHTML);
+            if (!isNaN(v) && v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
+        }
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
