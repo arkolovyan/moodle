@@ -330,12 +330,12 @@ function applySignedInput(answerContainer) {
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
-    if (input.getAttribute('readonly') || input.disabled) {
+    inp.value = input.value;
+    if (input.getAttribute('readonly') || input.disabled) 
         inp.disabled = true;
-        inp.value = input.value;
-    } else if (input.value) {
+    else if (input.value) {
         let val = parseFloat(input.value.replace(',','.'));
-        if (val > 0) inp.value = '+' + input.value;
+        if (val > 0) inp.value ='+' + input.value;
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
