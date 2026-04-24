@@ -346,13 +346,13 @@ function applySignedInput(answerContainer) {
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
         let submitter = event.submitter;
+        input.value = inp.value;
         if (submitter.name == 'finish') {
             let v = parseFloat(inp.value.replace(",", "."));
             if (isNaN(v)) input.value = inp.value
             else if (v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
             else input.value = inp.value;
         }else if(submitter.name=='fill')  alert('fill' + inp.outerHTML);
-        else input.value = inp.value;
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
