@@ -332,7 +332,7 @@ function applySignedInput(answerContainer) {
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (inp.hasAttribute('data-initial-value')) {
-        let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.');
+        let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.'));
         if (initialVal > 0){
             let s = '+' + initialVal;
             inp.value = s;
