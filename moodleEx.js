@@ -336,6 +336,7 @@ function applySignedInput(answerContainer) {
     form.addEventListener('submit', function () {
         let v = parseFloat(inp.value.replace(",", "."));
                 alert(v);
+                alert(isNaN(v));
         if (isNaN(v)) return;
         alert(inp.value);
         alert(input.value);
