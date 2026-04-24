@@ -356,7 +356,7 @@ function createDeviationTable(tag, className) {
         for (j = 0; j < 4; j++) {
             var angle = j * 90 + i * 10,
                 deviation = getDeviation(angle);
-            table += '<td>' + angle + '</td><td>' + deviation + '</td>';
+            table += '<td>' + angle + '</td><td>' + deviation.toFixed(1) + '</td>';
         }
         table += '</tr>'
     }
