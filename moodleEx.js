@@ -157,7 +157,7 @@ function centerDialog(box) {
 var deg_input_html = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
     min_input_html = "<input id='min_input_idSuffix' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>",
     time_input_html = "<input id='time_input_idSuffix' type='time' class='form-control d-inline' style='width:auto'>",
-    signed_input_html = "<input id='signed_input_idSuffix' type='text' class='form-control d-inline' style='width:30%;text-algn:right;'>";
+    signed_input_html = "<input id='signed_input_idSuffix' size='30' type='text' style='width:30%;text-algn:right;' class='form-control d-inline'>";
 //var deviation_table = [1.8, 1.1, 0.3, -0.5, -1.3, -2.1, -2.8, -3.4, -3.8, -4.1, -4.2, -4.1, -3.9, -3.5, -3, -2.4, -1.7, -1, -0.3, 0.4, 1.1, 1.6, 2.1, 2.6, 2.9, 3.2, 3.4, 3.6, 3.7, 3.8, 3.8, 3.7, 3.5, 3.3, 2.9, 2.4];
 function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
