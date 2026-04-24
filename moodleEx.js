@@ -335,9 +335,11 @@ function applySignedInput(answerContainer) {
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let v = parseFloat(inp.value.replace(",", "."));
+                alert(v);
         if (isNaN(v)) return;
         if (v > 0 && !inp.value.starsWith('+')) input.value = 999999
         else input.value = inp.value;
+        alert(inp.value);
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
