@@ -331,6 +331,7 @@ function applySignedInput(answerContainer) {
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
+    if (inp.hasAttribute('data-initial-value') && inp.value.indexOf('-') != 0) inp.value = '+' + inp.getAttribute('data-initial-value');
     if (input.value) inp.value = input.value;
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
