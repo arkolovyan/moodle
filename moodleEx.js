@@ -334,7 +334,10 @@ function applySignedInput(answerContainer) {
     if (inp.hasAttribute('data-initial-value')) {
         let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.');
         if (initialVal > 0){
-            inp.value = '+' + initialVal;
+            let s = '+' + initialVal;
+            inp.value = s;
+            input.value = s;
+            inp.setAttribute('data-initial-value',s);
         }
     }
     if (input.value) inp.value = input.value;
