@@ -333,8 +333,8 @@ function applySignedInput(answerContainer) {
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (inp.hasAttribute('data-initial-value')) {
         let initialVal = parseFloat(inp.getAttribute('data-initial-value').replace(',','.'));
-        if (initialVal > 0){
             alert(initialVal);
+        if (initialVal > 0){
             let s = '+' + initialVal;
             inp.value = s;
             input.value = s;
