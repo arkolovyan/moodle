@@ -314,6 +314,7 @@ function applyTimeInput(answerContainer) {
     let inp = content.querySelector('#time_input_' + idSuffix);
     if (input.value) inp.value = formatTime(input.value, ':');
     const form = content.closest('#responseform');
+    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     form.addEventListener('submit', function () {
         let v = parseFloat(inp.value.replace(",", ".").replace(":", "."));
         if (isNaN(v) || v < 0 || v > 24) return;
@@ -328,8 +329,9 @@ function applySignedInput(answerContainer) {
         idSuffix = randomId();
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
-    var inp = content.querySelector('#signed_input_' + idSuffix);
+    let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.value) inp.value = input.value;
+    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let v = parseFloat(inp.value.replace(",", "."));
