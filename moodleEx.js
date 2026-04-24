@@ -338,7 +338,7 @@ function applySignedInput(answerContainer) {
         if (submitter.name == 'finish') {
             let v = parseFloat(inp.value.replace(",", "."));
             if (isNaN(v)) input.value = inp.value
-            else if (v > 0 && !inp.value.starsWith('+')) input.value = '​' + inp.value;
+            else if (v > 0 && !inp.value.starsWith('+')) input.value = 'a' + inp.value;
             else input.value = inp.value;
         }
     });
