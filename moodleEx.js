@@ -341,6 +341,7 @@ function applySignedInput(answerContainer) {
             else if (v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
             else input.value = inp.value;
         }
+        else input.value = inp.value;
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
