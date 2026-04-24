@@ -333,10 +333,9 @@ function applySignedInput(answerContainer) {
     if (input.value) inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     const form = content.closest('#responseform');
-    form.addEventListener('submit', function () {
+    form.addEventListener('submit', function (event) {
+        alert(event.submitter.name);
         let v = parseFloat(inp.value.replace(",", "."));
-                alert(v);
-                alert(isNaN(v));
         if (isNaN(v)) return;
         if (v > 0 && !inp.value.starsWith('+')) input.value = 999999
         else input.value = inp.value;
