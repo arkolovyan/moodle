@@ -335,7 +335,7 @@ function applySignedInput(answerContainer) {
         inp.disabled = true;
     else if (input.value) {
         let val = parseFloat(input.value.replace(',','.'));
-        if (val > 0) inp.value ='+' + input.value;
+        if (!isNaN(val) && val > 0) inp.value ='+' + val;
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
