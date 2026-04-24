@@ -334,13 +334,13 @@ function applySignedInput(answerContainer) {
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
-        alert(event.submitter.name);
-        let v = parseFloat(inp.value.replace(",", "."));
-        if (isNaN(v)) return;
-        if (v > 0 && !inp.value.starsWith('+')) input.value = 999999
-        else input.value = inp.value;
-        alert(inp.value);
-        alert(input.value);
+        let submitter = event.submitter;
+        if (submitter.name == 'finish') {
+            let v = parseFloat(inp.value.replace(",", "."));
+            if (isNaN(v)) return;
+            if (v > 0 && !inp.value.starsWith('+')) input.value = '​' + inp.value;
+            else input.value = inp.value;
+        }
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
