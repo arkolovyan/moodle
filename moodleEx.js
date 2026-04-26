@@ -346,9 +346,9 @@ function applySignedInput(answerContainer) {
             v = parseFloat(inp.value.replace(",", ".")),
             missingPlus = !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0;
         input.value = inp.value;
-        if (submitter.name == 'finish') 
+        if (submitter.name == 'finish') {
             if (missingPlus) input.value = '​' + inp.value;
-        else if (submitter.name == 'save'){
+        }else if (submitter.name == 'save'){
             alert('missingPlus');
             if (missingPlus) input.value = 'a' + inp.value;
         }
