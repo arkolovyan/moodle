@@ -337,7 +337,7 @@ function applySignedInput(answerContainer) {
     else if (input.value) {
         let inp_str = input.value.replace(',','.'),
             val = parseFloat(inp_str);
-        if (inp_str.indexOf('​') == 0) alert('null');
+        if (inp_str.indexOf('a') == 0) alert('null');
         if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
     }
     const form = content.closest('#responseform');
@@ -348,8 +348,10 @@ function applySignedInput(answerContainer) {
         input.value = inp.value;
         if (submitter.name == 'finish') 
             if (missingPlus) input.value = '​' + inp.value;
-        else if (submitter.name == 'save')
+        else if (submitter.name == 'save'){
+            alert('missingPlus');
             if (missingPlus) input.value = 'a' + inp.value;
+        }
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
