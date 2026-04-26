@@ -240,8 +240,9 @@ function formatDirection(value, type) {
     }
     else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
-    else if (type == 'signed') return (v > 0) ? '+' + v : v + '';
-    else if (type == 'rhumb') return rhumbs[v];
+    else if (type == 'signed') return (v > 0) ? '+' + v : v + ''
+    else if (type == 'rhumb') return rhumbs[v]
+    else return value.toString();
 }
 function formatCorrectAnswer(answerContainer, type) {
     const popUp = answerContainer.querySelector('a');
@@ -340,12 +341,14 @@ function applySignedInput(answerContainer) {
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
-        let submitter = event.submitter;
+        let submitter = event.submitter,
+            v = parseFloat(inp.value.replace(",", ".")),
+            missingPlus = !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0;
         input.value = inp.value;
-        if (submitter.name == 'finish') {
-            let v = parseFloat(inp.value.replace(",", "."));
-            if (!isNaN(v) && v > 0 && inp.value.indexOf('+') != 0) input.value = '​' + inp.value;
-        }
+        if (submitter.name == 'finish') 
+            if (missingPlus) input.value = '​' + inp.value;
+        else if (submitter.name == 'save')
+            if (missingPlus) input.value = '​' + inp.value;
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
