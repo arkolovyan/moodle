@@ -337,8 +337,11 @@ function applySignedInput(answerContainer) {
     else if (input.value) {
         let inp_str = input.value.replace(',','.'),
             val = parseFloat(inp_str);
-        if (inp_str.indexOf('a') == 0) alert('null');
-        if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
+        if (inp_str.indexOf('a') == 0){
+            inp.value=1;
+            input.value=1;
+        }
+        else if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
