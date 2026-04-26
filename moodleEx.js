@@ -337,11 +337,10 @@ function applySignedInput(answerContainer) {
     else if (input.value) {
         let inp_str = input.value.replace(',','.'),
             val = parseFloat(inp_str);
-        if (inp_str.indexOf('a') == 0){
-            inp.value=1;
-            input.value=1;
+        if(!isNaN(val){
+            if(val>999999) inp.value = val - 9999999;
+            else if(val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
         }
-        else if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
@@ -349,12 +348,10 @@ function applySignedInput(answerContainer) {
             v = parseFloat(inp.value.replace(",", ".")),
             missingPlus = !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0;
         input.value = inp.value;
-        alert(submitter.name);
         if (submitter.name == 'finish') {
             if (missingPlus) input.value = '​' + inp.value;
         }else if (submitter.name == 'save'){
-            alert(missingPlus);
-            if (missingPlus) input.value = 'a' + inp.value;
+            if (missingPlus) input.value = 9999999 + v;
         }
     });
     formatCorrectAnswer(answerContainer, 'signed');
