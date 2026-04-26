@@ -338,7 +338,7 @@ function applySignedInput(answerContainer) {
         let inp_str = input.value.replace(',','.'),
             val = parseFloat(inp_str);
         if(!isNaN(val)) {
-            if(val>999999) inp.value = val - 9999999;
+            if(val>999999) inp.value = parseFloat(inp_str.replace('9999999',''));
             else if(val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
         }
     }
@@ -351,7 +351,7 @@ function applySignedInput(answerContainer) {
         if (submitter.name == 'finish') {
             if (missingPlus) input.value = '​' + inp.value;
         }else if (submitter.name == 'save'){
-            if (missingPlus) input.value = 9999999 + v;
+            if (missingPlus) input.value = '9999999' + v;
         }
     });
     formatCorrectAnswer(answerContainer, 'signed');
