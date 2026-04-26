@@ -349,7 +349,7 @@ function applySignedInput(answerContainer) {
         if (submitter.name == 'finish') 
             if (missingPlus) input.value = '​' + inp.value;
         else if (submitter.name == 'save')
-            if (missingPlus) input.value = '​' + inp.value;
+            if (missingPlus) input.value = 'a' + inp.value;
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
