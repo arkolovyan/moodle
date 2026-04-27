@@ -250,7 +250,7 @@ function formatDirection(value, type) {
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
     else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
     else if (type == 'rhumb') return rhumbs[v]
-    else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + 'W' : str_val + 'E';
+    else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + '​°W' : str_val + '​°E';
     else return value.toString();
 }
 function formatSigned(value, suffix = '') {
