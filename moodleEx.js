@@ -305,8 +305,8 @@ function applyPositionInput(answerContainer, type) {
         let v = parseFloat(input.value.replace(',', '.'));
         if (!isNaN(v)) {
             let sgn = (v < 0) ? -1 : 1;
-            v = Math.abs(v),
-             let deg = Math.floor(v),
+            v = Math.abs(v)
+            let deg = Math.floor(v),
                 mins = Math.round((v - deg) * 600) / 10;
             input_deg.value = deg;
             if (mins < 10) mins = '0' + mins;
