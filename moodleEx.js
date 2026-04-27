@@ -293,7 +293,7 @@ function applyPositionInput(answerContainer, type) {
     select.add(new Option(letter.positive, '1'));
     select.add(new Option(letter.negative, '-1'));
     input.insertAdjacentHTML('beforebegin', deg_input_html.replace('idSuffix', idSuffix));
-    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
+    input.insertAdjacentHTML('beforebegin', "<span>°</span>");
     input.insertAdjacentHTML('beforebegin', min_input_html.replace('idSuffix', idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>\'</span>");
     input.parentNode.insertBefore(select, input);
