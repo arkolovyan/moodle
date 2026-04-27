@@ -388,8 +388,8 @@ function createDeviationTable(tag, className) {
     table += '</tbody></table>';
     let owner = document.querySelector(tag + '.' + className)
     owner.innerHTML = table;
-    for (const el of owner.querySelectorAll('th', 'td')) {
-        el.style.cssText += 'padding: 3px 10px 3px 10px;border:1px solid black';
+    for (const el of owner.querySelectorAll('th, td')) {
+        el.style.cssText += 'padding: 3px 10px;border:1px solid black';
     }
 }
 function getDeviation(kk) {
