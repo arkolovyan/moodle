@@ -189,7 +189,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'rhumb', 'signed'];
+    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
@@ -208,6 +208,7 @@ function formatValues(tag, className) {
 function formatValue(value, type) {
     if (isPosition(type)) return formatPosition(value, type)
     else if (isDirection(type)) return formatDirection(value, type)
+    else if (type == 'signed') return formatSigned(value);
     else if (type == 'time') return formatTime(value);
 }
 function formatPosition(value, type) {
@@ -232,17 +233,26 @@ function formatTime(value, separator = ':') {
     return hours + separator + mins;
 }
 function formatDirection(value, type) {
-    let v = parseFloat(value.replace(',', '.')); 
+    let v = parseFloat(value.replace(',', '.'));
+    if (isNaN(v)) return value.toString();
+    v = (360 + v) % 360;
+    let rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
+        quoters = ['NE', 'SE', 'SW', 'NW'];
     if (type == 'quoter') {
         let n = Math.floor(v / 90),
-            angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v;
+            angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v
         return angle + quoters[n];
     }
     else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
-    else if (type == 'signed') return (v > 0) ? '+' + v : v + ''
+    else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
     else if (type == 'rhumb') return rhumbs[v]
     else return value.toString();
+}
+function formatSigned(value, suffix = '') {
+    let v = parseFloat(value.replace(',', '.'));
+    if (isNaN(v)) return value.toString();
+    return (v > 0) ? '+' + v : v + suffix;
 }
 function formatCorrectAnswer(answerContainer, type) {
     const popUp = answerContainer.querySelector('a');
@@ -272,7 +282,7 @@ function applyPositionInput(answerContainer, type) {
     select.className += 'select form-select d-inline-block';
     select.add(new Option(letter.positive, '1'));
     select.add(new Option(letter.negative, '-1'));
-    input.insertAdjacentHTML('beforebegin', deg_input_html.replace('idSuffix',idSuffix));
+    input.insertAdjacentHTML('beforebegin', deg_input_html.replace('idSuffix', idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
     input.insertAdjacentHTML('beforebegin', min_input_html.replace('idSuffix', idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>\'</span>");
@@ -299,7 +309,7 @@ function applyPositionInput(answerContainer, type) {
         select.disabled = true;
     }
     const form = content.closest('#responseform');
-    form.addEventListener('submit', function() {
+    form.addEventListener('submit', function () {
         let d = parseInt(input_deg.value),
             m = parseFloat(input_min.value.replace(',', '.')) / 60,
             degs = d + m;
@@ -332,14 +342,14 @@ function applySignedInput(answerContainer) {
     input.style.setProperty('display', 'none', 'important');
     let inp = content.querySelector('#signed_input_' + idSuffix);
     inp.value = input.value;
-    if (input.getAttribute('readonly') || input.disabled) 
+    if (input.getAttribute('readonly') || input.disabled)
         inp.disabled = true;
     else if (input.value) {
-        let inp_str = input.value.replace(',','.'),
+        let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
-        if(!isNaN(val)) {
-            if(val>999999) inp.value = parseFloat(inp_str.replace('9999999',''));
-            else if(val > 0 && inp_str.indexOf('+' == -1)) inp.value ='+' + val;
+        if (!isNaN(val)) {
+            if (val > 999999) inp.value = parseFloat(inp_str.replace('9999999', ''));
+            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + val;
         }
     }
     const form = content.closest('#responseform');
@@ -350,7 +360,7 @@ function applySignedInput(answerContainer) {
         input.value = inp.value;
         if (submitter.name == 'finish') {
             if (missingPlus) input.value = '​' + inp.value;
-        }else if (submitter.name == 'save'){
+        } else if (submitter.name == 'save') {
             if (missingPlus) input.value = '9999999' + v;
         }
     });
@@ -358,9 +368,7 @@ function applySignedInput(answerContainer) {
 }
 
 //************ Directions input ********
-var rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
-    quoters = ['NE', 'SE', 'SW', 'NW'],
-    EW = ['E', 'W'];
+var EW = ['E', 'W'];
 
 function createDeviationTable(tag, className) {
     var table = '<table width="auto" cellspacing="2" cellpadding = "2" ><thead style="text-align: center;"><tr>';
@@ -378,7 +386,7 @@ function createDeviationTable(tag, className) {
         table += '</tr>'
     }
     table += '</tbody></table>';
-    let owner=document.querySelector(tag+'.'+className)
+    let owner = document.querySelector(tag + '.' + className)
     owner.innerHTML = table;
 }
 function getDeviation(kk) {
@@ -424,7 +432,4 @@ function replaceNegativeInput(negative) {
             content.querySelector('span.answer select').value = negative;
         }
     }
-}
-function nearestRhumb(val, rhumbs) {
-    return rhumbs[Math.round(((360 + val) % 360) * rhumbs.length / 360)];
 }
