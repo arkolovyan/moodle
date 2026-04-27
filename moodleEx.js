@@ -371,7 +371,7 @@ function applySignedInput(answerContainer) {
 var EW = ['E', 'W'];
 
 function createDeviationTable(tag, className) {
-    var table = '<table width="auto" cellspacing="2" cellpadding = "2" ><thead style="text-align: center;"><tr>';
+    var table = '<table width="auto" class="deviation-table"><thead style="text-align: center;"><tr>';
     for (i = 0; i < 4; i++) {
         table += '<th>KK</th><th>δ</th>';
     }
@@ -388,6 +388,9 @@ function createDeviationTable(tag, className) {
     table += '</tbody></table>';
     let owner = document.querySelector(tag + '.' + className)
     owner.innerHTML = table;
+    for (const el of owner.querySelectorAll('th', 'td')) {
+        el.style.cssText += 'padding: 3px 10px 3px 10px;border:1px solid black';
+    }
 }
 function getDeviation(kk) {
     kk = kk * Math.PI / 180;
