@@ -168,6 +168,7 @@ function numericQuestion(type) {
     if (isPosition(type)) applyPositionInput(answer, type)
     else if (type == 'time') applyTimeInput(answer)
     else if (type == 'signed') applySignedInput(answer)
+    else if (type == 'ew') applyEWInput(answer)
     else return false;
     return true;
 }
@@ -180,6 +181,7 @@ function clozeQuestion() {
         else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'longitude')
         else if (q.parentNode.className == 'time') applyTimeInput(q)
         else if (q.parentNode.className == 'signed') applySignedInput(q)
+        else if (q.parentNode.className == 'ew') applyEWInput(q)
         else n += 1;
     }
     return (n < subquestions.length);
@@ -364,7 +366,7 @@ function applySignedInput(answerContainer) {
     form.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'finish':
-                if (missingPlus(inp.value)) input.value = '​' + inp.value + '​';
+                if (missingPlus(inp.value)) input.value = '​' + inp.value;
                 break;
             case 'save':
                 if (missingPlus(inp.value)) input.value = '9999999' + inp.value;
@@ -374,6 +376,38 @@ function applySignedInput(answerContainer) {
         }
     });
     formatCorrectAnswer(answerContainer, 'signed');
+}
+function applyEWInput(answerContainer) {
+    const input = answerContainer.querySelector('input'),
+        select = document.createElement('select'),
+        idSuffix = randomId();
+    select.id = 'ew_sgn_' + idSuffix;
+    select.className += 'select form-select d-inline-block';
+    select.add(new Option('E', '1'));
+    select.add(new Option('W', '-1'));
+    input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
+    input.style.setProperty('display', 'none', 'important');
+    input.parentNode.insertBefore(select, input);
+    let inp = content.querySelector('#signed_input_' + idSuffix);
+    if (input.value) {
+        let v = parseFloat(input.value.replace(',', '.'));
+        if (!isNaN(v)) {
+            let sgn = (v < 0) ? -1 : 1;
+            inp.value = Math.abs(v);
+            select.value = sgn;
+        }
+    }
+    if (input.getAttribute('readonly') || input.disabled) {
+        inp.disabled = true;
+        select.disabled = true;
+    }
+    formatCorrectAnswer(answerContainer, 'ew');
+    const form = content.closest('#responseform');
+    form.addEventListener('submit', function () {
+        let d = parseInt(inp.value);
+        if (!isNaN(d)) d *= parseInt(select.value);
+        input.value = d;
+    });
 }
 
 //************ Directions input ********
