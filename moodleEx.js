@@ -189,7 +189,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb'];
+    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb'. 'ew'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
@@ -247,6 +247,7 @@ function formatDirection(value, type) {
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
     else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
     else if (type == 'rhumb') return rhumbs[v]
+    else if (type == 'ew') return (v < 0) ? v + 'W' : v + 'E';
     else return value.toString();
 }
 function formatSigned(value, suffix = '') {
