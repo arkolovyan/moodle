@@ -387,6 +387,7 @@ function applyEWInput(answerContainer) {
     select.add(new Option('W', '-1'));
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
+    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
     input.parentNode.insertBefore(select, input);
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.value) {
