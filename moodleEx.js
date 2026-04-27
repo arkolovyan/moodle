@@ -256,6 +256,12 @@ function formatSigned(value, suffix = '') {
     if (isNaN(v)) return value.toString();
     return (v > 0) ? '+' + v : v + suffix;
 }
+function formatNumericSpans(fractioDigits) {
+    for (el of content.querySelectorAll('span.numeric')){
+        let v = parseFloat(el.innerText);
+        if (!isNaN(v)) el.innerText = v.toFixed(fractioDigits);
+    }
+}
 function formatCorrectAnswer(answerContainer, type) {
     const popUp = answerContainer.querySelector('a');
     if (popUp) {
