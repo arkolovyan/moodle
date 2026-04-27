@@ -372,9 +372,9 @@ function applySignedInput(answerContainer) {
 
 //************ Directions input ********
 function missingPlus(value) {
-    value = value.toString();
-    let v = parseFloat(value.replace(",", "."));
-    return !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0
+    let str_val = value.toString(),
+        v = parseFloat(str_val.replace(",", "."));
+    return !isNaN(v) && v > 0 && str_val.indexOf('+') != 0
 }
 function createDeviationTable(tag, className) {
     var table = '<table width="auto" class="deviation-table"><thead style="text-align: center;"><tr>';
