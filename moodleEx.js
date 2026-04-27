@@ -189,7 +189,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb', 'ew'];
+    const arr = ['quoter', 'semiN', 'semiS', 'rhumb', 'nearestRhumb', 'ew'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
@@ -235,8 +235,8 @@ function formatTime(value, separator = ':') {
 function formatDirection(value, type) {
     let str_val = value.toString(),
         v = parseFloat(str_val.replace(',', '.'));
-    if (isNaN(v)) return value.toString();
-    v = (360 + v) % 360;
+    if (isNaN(v)) return str_val;
+    if (type != 'ew') v = (360 + v) % 360;
     let rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
         quoters = ['NE', 'SE', 'SW', 'NW'];
     if (type == 'quoter') {
@@ -248,7 +248,7 @@ function formatDirection(value, type) {
     else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
     else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
     else if (type == 'rhumb') return rhumbs[v]
-    else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-','') + 'W' : str_val + 'E';
+    else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + 'W' : str_val + 'E';
     else return value.toString();
 }
 function formatSigned(value, suffix = '') {
@@ -356,22 +356,26 @@ function applySignedInput(answerContainer) {
     }
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
-        let submitter = event.submitter,
-            v = parseFloat(inp.value.replace(",", ".")),
-            missingPlus = !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0;
-        input.value = inp.value;
-        if (submitter.name == 'finish') {
-            if (missingPlus) input.value = '​' + inp.value;
-        } else if (submitter.name == 'save') {
-            if (missingPlus) input.value = '9999999' + v;
+        switch (event.submitter.name) {
+            case 'finish':
+                if (missingPlus(inp.value)) input.value = '​' + inp.value;
+                break;
+            case 'save':
+                if (missingPlus(inp.value)) input.value = '9999999' + inp.value;
+                break;
+            default:
+                input.value = inp.value;
         }
     });
     formatCorrectAnswer(answerContainer, 'signed');
 }
 
 //************ Directions input ********
-var EW = ['E', 'W'];
-
+function missingPlus(value) {
+    value = value.toString();
+    let v = parseFloat(value.replace(",", "."));
+    return !isNaN(v) && v > 0 && inp.value.indexOf('+') != 0
+}
 function createDeviationTable(tag, className) {
     var table = '<table width="auto" class="deviation-table"><thead style="text-align: center;"><tr>';
     for (i = 0; i < 4; i++) {
