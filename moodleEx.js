@@ -404,7 +404,7 @@ function applyEWInput(answerContainer) {
     formatCorrectAnswer(answerContainer, 'ew');
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
-        let d = parseInt(inp.value);
+        let d = parseFloat(inp.value.replace(',','.');
         if (!isNaN(d)) d *= parseInt(select.value);
         input.value = d;
     });
