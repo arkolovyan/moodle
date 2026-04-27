@@ -189,7 +189,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb'. 'ew'];
+    const arr = ['quoter', 'semiN', 'semiS', 'rhumb',  'nearestRhumb', 'ew'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
