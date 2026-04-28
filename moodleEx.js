@@ -391,7 +391,7 @@ function applyPositionInput(answerContainer, type) {
 }
 function applyDirectionInput(answerContainer, type, units = '') {
     let f = getDirectionFormat(type, 0)
-    if (isNan(f.value)) return;
+    if (isNaN(f.value)) return;
     let input = answerContainer.querySelector('input'),
         selectFirst = document.createElement('select'),
         selectLast = document.createElement('select'),
