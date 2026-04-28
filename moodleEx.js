@@ -154,34 +154,37 @@ function centerDialog(box) {
 }
 //***************************************
 //************ Test questions UI ********
-var deg_input_html = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
+let deg_input_html = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
     min_input_html = "<input id='min_input_idSuffix' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>",
     time_input_html = "<input id='time_input_idSuffix' type='time' class='form-control d-inline' style='width:auto'>",
-    signed_input_html = "<input id='signed_input_idSuffix' size='30' type='text' style='width:30%; text-align: right' class='form-control d-inline'>";
-//var deviation_table = [1.8, 1.1, 0.3, -0.5, -1.3, -2.1, -2.8, -3.4, -3.8, -4.1, -4.2, -4.1, -3.9, -3.5, -3, -2.4, -1.7, -1, -0.3, 0.4, 1.1, 1.6, 2.1, 2.6, 2.9, 3.2, 3.4, 3.6, 3.7, 3.8, 3.8, 3.7, 3.5, 3.3, 2.9, 2.4];
+    signed_input_html = "<input id='signed_input_idSuffix' size='30' type='text' style='width:30%; text-align: right' class='form-control d-inline'>",
+    rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
+    quoters = ['NE', 'SE', 'SW', 'NW'];
 function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
 };
-function numericQuestion(type) {
+function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
     if (isPosition(type)) applyPositionInput(answer, type)
+    else if (isDirection(type)) applyDirectionInput(answer, type, units)
     else if (type == 'time') applyTimeInput(answer)
-    else if (type == 'signed') applySignedInput(answer)
-    else if (type == 'ew') applyEWInput(answer)
+    else if (type == 'signed') applySignedInput(answer, units)
     else return false;
     return true;
 }
-function clozeQuestion() {
+function clozeQuestion(units) {
     const subquestions = content.querySelectorAll('span.subquestion');
     if (subquestions.length == 0) return false;
     let n = 0;
     for (const q of subquestions) {
-        if (q.parentNode.className == 'latitude') applyPositionInput(q, 'latitude')
-        else if (q.parentNode.className == 'longitude') applyPositionInput(q, 'longitude')
-        else if (q.parentNode.className == 'time') applyTimeInput(q)
-        else if (q.parentNode.className == 'signed') applySignedInput(q)
-        else if (q.parentNode.className == 'ew') applyEWInput(q)
+        let type = q.parentNode.className,
+            unit = '';
+        if (units && (type in units)) unit = units[type];
+        if (isPosition(type)) applyPositionInput(q, type)
+        else if (isDirection(type)) applyDirectionInput(q, type, unit)
+        else if (type == 'time') applyTimeInput(q)
+        else if (type == 'signed') applySignedInput(q, unit)
         else n += 1;
     }
     return (n < subquestions.length);
@@ -200,17 +203,70 @@ function positionLetter(type) {
     else if (type == 'deltaLat') return { 'positive': 'к N', 'negative': 'к S' }
     else if (type == 'deltaLon') return { 'positive': 'к E', 'negative': 'к W' }
 }
-//************* Formatting ************
-function formatValues(tag, className) {
-    const elements = content.querySelectorAll(tag + '.' + className);
-    for (const el of elements) {
-        el.innerText = formatValue(el.innerText, className);
+function getDirectionFormat(type, value) {
+    let str_val = ('' + value).replace(',', '.'),
+        v = parseFloat(str_val);
+    if (!isDirection(type) || isNaN(v)) return { 'prefix': '', 'value': NaN, 'suffix': str_val, 'options': [] };
+    if (type != 'ew') v = (360 + v) % 360;
+    let decimalPos = str_val.indexOf('.'),
+        fractionDigits = (decimalPos > 0) ? 0 : str_val.length - decimalPos;
+    if (fractionDigits > 0) {
+        let n = Math.pow(10, fractionDigits)
+        v = Math.round(v * n) / n;
+    }
+    switch (type) {
+        case 'quoter':
+            let n = Math.floor(v / 90),
+                angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v;
+            return { 'prefix': '', 'value': angle, 'suffix': quoters[n], 'options': quoters };
+        case 'semiN':
+            if (v > 180) return { 'prefix': 'N', 'value': 360 - v, 'suffix': 'W', 'options': ['E','W'] }
+            else return { 'prefix': 'N', 'value': v, 'suffix': 'E', 'options': ['E', 'W'] };
+        case 'semiS':
+            if (v > 180) return { 'prefix': 'S', 'value': v - 180, 'suffix': 'W', 'options': ['E', 'W'] }
+            else return { 'prefix': 'S', 'value': 180 - v, 'suffix': 'E', 'options': ['E', 'W'] };
+        case 'rhumb':
+            return { 'prefix': '', 'value': v, 'suffix': rhumbs[v], 'options': rhumbs };
+        case 'nearestRhumb':
+            let n = Math.round(v * rhumbs.length / 360);
+            return { 'prefix': '', 'value': n, 'suffix': rhumbs[n], 'options': rhumbs };
+        case 'ew':
+            return { 'prefix': '', 'value': Math.abs(v), 'suffix': (v < 0) ? 'W' : 'E', 'options': ['E', 'W'] };
+        default:
+            return { 'prefix': '', 'value': NaN, 'suffix': str_val, 'options': [] };
     }
 }
-function formatValue(value, type) {
+function parseDirection(type, prefixVal, value, suffixVal) {
+    let str_val = ('' + value).replace(',', '.'),
+        v = parseFloat(str_val);
+    if (!isDirection(type) || isNaN(v)) return str_val;
+    switch (type) {
+        case 'quoter':
+            return (suffixVal == 0) ? v : (suffixVal == 1) ? 180 - v : (suffixVal == 2) ? v + 180 : 360 - v;
+        case 'semiN':
+        case 'semiS':
+            if(prefixVal==1) return (360 + v * suffixVal) % 360
+            else if (prefixVal == -1) return (180 - v * suffixVal);
+        case 'rhumb':
+        case 'nearestRhumb':
+            return suffixVal * 22.5;
+        case 'ew':
+            return v * suffixVal;
+        default:
+            return str_val;
+    }
+}
+//************* Formatting ************
+function formatValues(tag, className, units = '') {
+    const elements = content.querySelectorAll(tag + '.' + className);
+    for (const el of elements) {
+        el.innerText = formatValue(el.innerText, className, units);
+    }
+}
+function formatValue(value, type, units = '') {
     if (isPosition(type)) return formatPosition(value, type)
-    else if (isDirection(type)) return formatDirection(value, type)
-    else if (type == 'signed') return formatSigned(value);
+    else if (isDirection(type)) return formatDirection(value, type, units)
+    else if (type == 'signed') return formatSigned(value, units);
     else if (type == 'time') return formatTime(value);
 }
 function formatPosition(value, type) {
@@ -234,57 +290,62 @@ function formatTime(value, separator = ':') {
     if (mins < 10) mins = '0' + mins;
     return hours + separator + mins;
 }
-function formatDirection(value, type) {
-    let str_val = value.toString(),
-        v = parseFloat(str_val.replace(',', '.'));
-    if (isNaN(v)) return str_val;
-    if (type != 'ew') v = (360 + v) % 360;
-    let rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
-        quoters = ['NE', 'SE', 'SW', 'NW'];
-    if (type == 'quoter') {
-        let n = Math.floor(v / 90),
-            angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v
-        return angle + quoters[n];
-    }
-    else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + 'W' : v + 'E'
-    else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + 'W' : (180 - v) + 'E'
-    else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
-    else if (type == 'rhumb') return rhumbs[v]
-    else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + '​°W' : str_val + '​°E';
-    else return value.toString();
+function formatDirection(value, type, units = '') {
+    let f = getDirectionFormat(type, value);
+    if (isNaN(f.value)) return f.suffix;
+    return f.prefix + f.value + units + f.suffix;
+    //let str_val = value.toString(),
+    //    v = parseFloat(str_val.replace(',', '.'));
+    //if (isNaN(v)) return str_val;
+    //if (type != 'ew') v = (360 + v) % 360;
+    //if (type == 'quoter') {
+    //    let n = Math.floor(v / 90),
+    //        angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v
+    //    return angle + units + quoters[n];
+    //}
+    //else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + units + 'W' : v + units + 'E'
+    //else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + units + 'W' : (180 - v) + units + 'E'
+    //else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
+    //else if (type == 'rhumb') return rhumbs[v]
+    //else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + units + '​W' : str_val + units + 'E';
+    //else return str_val;
 }
-function formatSigned(value, suffix = '') {
+function formatSigned(value, units = '') {
     let v = parseFloat(value.replace(',', '.'));
     if (isNaN(v)) return value.toString();
-    return (v > 0) ? '+' + v : v + suffix;
+    return (v > 0) ? '+' + v + units : v + units;
 }
-function formatNumericSpans(fractioDigits) {
-    for (el of content.querySelectorAll('span.numeric')){
+function formatNumericSpans(fractionDigits) {
+    let n = Math.pow(10, fractionDigits);
+    for (el of content.querySelectorAll('span.numeric')) {
         let v = parseFloat(el.innerText);
-        if (!isNaN(v)) el.innerText = v.toFixed(fractioDigits);
+        if (!isNaN(v)) {
+            let val = Math.round(v * n) / n;
+            el.innerText = val.toString();
+        }
     }
 }
-function formatCorrectAnswer(answerContainer, type) {
+function formatCorrectAnswer(answerContainer, type, units = '') {
     const popUp = answerContainer.querySelector('a');
     if (popUp) {
         let bsContent = popUp.getAttribute('data-bs-content'),
             start = bsContent.indexOf(':') + 1,
             end = bsContent.indexOf('<', start),
             str_val = bsContent.substring(start, end);
-        popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatValue(str_val, type)));
+        popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatValue(str_val, type, units)));
     } else {
         const rightAnswer = content.querySelector('div.rightanswer');
         if (rightAnswer) {
             let s = rightAnswer.innerText,
                 pos = s.indexOf(':') + 2;
-            rightAnswer.innerText = s.substring(0, pos) + formatValue(s.substring(pos), type);
+            rightAnswer.innerText = s.substring(0, pos) + formatValue(s.substring(pos), type, units);
         }
     }
 }
 //************* Replace standard input ************
 function applyPositionInput(answerContainer, type) {
     if (!isPosition(type)) return;
-    const input = answerContainer.querySelector('input'),
+    let input = answerContainer.querySelector('input'),
         select = document.createElement('select'),
         idSuffix = randomId(),
         letter = positionLetter(type);
@@ -293,14 +354,13 @@ function applyPositionInput(answerContainer, type) {
     select.add(new Option(letter.positive, '1'));
     select.add(new Option(letter.negative, '-1'));
     input.insertAdjacentHTML('beforebegin', deg_input_html.replace('idSuffix', idSuffix));
-    input.insertAdjacentHTML('beforebegin', "<span style='line-height:2em;'>°</span>");
+    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
     input.insertAdjacentHTML('beforebegin', min_input_html.replace('idSuffix', idSuffix));
     input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>\'</span>");
     input.parentNode.insertBefore(select, input);
     input.style.setProperty('display', 'none', 'important');
     let input_deg = content.querySelector('#deg_input_' + idSuffix),
         input_min = content.querySelector('#min_input_' + idSuffix);
-    formatCorrectAnswer(answerContainer, type);
     if (input.value) {
         let v = parseFloat(input.value.replace(',', '.'));
         if (!isNaN(v)) {
@@ -308,8 +368,8 @@ function applyPositionInput(answerContainer, type) {
             v = Math.abs(v)
             let deg = Math.floor(v),
                 mins = Math.round((v - deg) * 600) / 10;
-            input_deg.value = deg;
             if (mins < 10) mins = '0' + mins;
+            input_deg.value = deg;
             input_min.value = mins;
             select.value = sgn;
         }
@@ -319,6 +379,7 @@ function applyPositionInput(answerContainer, type) {
         input_min.disabled = true;
         select.disabled = true;
     }
+    formatCorrectAnswer(answerContainer, type);
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let d = parseInt(input_deg.value),
@@ -328,15 +389,86 @@ function applyPositionInput(answerContainer, type) {
         input.value = degs;
     });
 }
+function applyDirectionInput(answerContainer, type, units = '') {
+    let f = getDirectionFormat(type, 0)
+    if (isNan(f.value)) return;
+    let input = answerContainer.querySelector('input'),
+        selectFirst = document.createElement('select'),
+        selectLast = document.createElement('select'),
+        idSuffix = randomId();
+    input.style.setProperty('display', 'none', 'important');
+    if (f.prefix) {
+        selectFirst.id = 'first_sgn_' + idSuffix;
+        selectFirst.className += 'select form-select d-inline-block';
+        selectFirst.add(new Option('N', '1'));
+        selectFirst.add(new Option('S', '-1'));
+        input.parentNode.insertBefore(selectFirst, input);
+    }
+    if (type != 'rhumb' && type != 'nearistRhumb') {
+        input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
+    }
+    let inp = content.querySelector('#signed_input_' + idSuffix);
+    if (units) {
+        if (units == '°' || units == '\'')
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+        else
+            input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
+    }
+    let options = f.options;
+    if (options.length > 0) {
+        selectLast.id = 'first_sgn_' + idSuffix;
+        selectLast.className += 'select form-select d-inline-block';
+        if (options.length == 2) { // E/W
+            selectLast.add(new Option('E', '1'));
+            selectLast.add(new Option('W', '-1'));
+        } else {
+            for (i = 0; i < option.length; i++) {
+                selectLast.add(new Option(options[i], i));
+            }
+        }
+        input.parentNode.insertBefore(selectLast, input);
+    }
+    if (input.value) {
+        f = getDirectionFormat(type, input.value);
+        if (!isNaN(f.value)) {
+            if(inp) inp.value = f.value;
+            if (f.prefix) {
+                for (let i = 0; i < selectFirst.options.length; i++) {
+                    if (selectFirst.options[i].text === f.prefix) {
+                        selectFirst.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            if (f.suffix) {
+                let i = f.options.indexOf(f.suffix);
+                if (i > -1) selectLast.selectedIndex = i; 
+            }
+        }
+    }
+    if (input.getAttribute('readonly') || input.disabled) {
+        inp.disabled = true;
+        selectFirst.disabled = true;
+        selectLast.disabled = true;
+    }
+    formatCorrectAnswer(answerContainer, type, units);
+    const form = content.closest('#responseform');
+    form.addEventListener('submit', function () {
+        let v = (inp) ? inp.value : '0';
+        input.value = parseDirection(type,selectFirst.value,v,selectLast.value);
+    });
+
+}
 function applyTimeInput(answerContainer) {
     let input = answerContainer.querySelector('input'),
         idSuffix = randomId();
-    input.insertAdjacentHTML('beforebegin', time_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
+    input.insertAdjacentHTML('beforebegin', time_input_html.replace('idSuffix', idSuffix));
     let inp = content.querySelector('#time_input_' + idSuffix);
     if (input.value) inp.value = formatTime(input.value, ':');
-    const form = content.closest('#responseform');
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
+    formatCorrectAnswer(answerContainer, 'time');
+    const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let v = parseFloat(inp.value.replace(",", ".").replace(":", "."));
         if (isNaN(v) || v < 0 || v > 24) return;
@@ -344,13 +476,18 @@ function applyTimeInput(answerContainer) {
             mins = Math.round((v - hours) * 100);
         input.value = hours + mins / 60;
     });
-    formatCorrectAnswer(answerContainer, 'time');
 }
-function applySignedInput(answerContainer) {
+function applySignedInput(answerContainer, units = '') {
     let input = answerContainer.querySelector('input'),
         idSuffix = randomId();
-    input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     input.style.setProperty('display', 'none', 'important');
+    input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
+    if (units) {
+        if (units == '°' || units == '\'')
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+        else
+            input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
+    }
     let inp = content.querySelector('#signed_input_' + idSuffix);
     inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled)
@@ -363,6 +500,7 @@ function applySignedInput(answerContainer) {
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + val;
         }
     }
+    formatCorrectAnswer(answerContainer, 'signed', units);
     const form = content.closest('#responseform');
     form.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
@@ -376,19 +514,23 @@ function applySignedInput(answerContainer) {
                 input.value = inp.value;
         }
     });
-    formatCorrectAnswer(answerContainer, 'signed');
 }
-function applyEWInput(answerContainer) {
-    const input = answerContainer.querySelector('input'),
+function applyEWInput(answerContainer, units = '') {
+    let input = answerContainer.querySelector('input'),
         select = document.createElement('select'),
         idSuffix = randomId();
+    input.style.setProperty('display', 'none', 'important');
     select.id = 'ew_sgn_' + idSuffix;
     select.className += 'select form-select d-inline-block';
     select.add(new Option('E', '1'));
     select.add(new Option('W', '-1'));
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
-    input.style.setProperty('display', 'none', 'important');
-    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
+    if (units) {
+        if (units == '°' || units == '\'')
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+        else
+            input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
+    }
     input.parentNode.insertBefore(select, input);
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.value) {
@@ -403,21 +545,21 @@ function applyEWInput(answerContainer) {
         inp.disabled = true;
         select.disabled = true;
     }
-    formatCorrectAnswer(answerContainer, 'ew');
+    formatCorrectAnswer(answerContainer, 'ew', units);
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
-        let d = parseFloat(inp.value.replace(',','.'));
+        let d = parseFloat(inp.value.replace(',', '.'));
         if (!isNaN(d)) d *= parseInt(select.value);
         input.value = d;
     });
 }
-
-//************ Directions input ********
 function missingPlus(value) {
     let str_val = value.toString(),
         v = parseFloat(str_val.replace(",", "."));
     return !isNaN(v) && v > 0 && str_val.indexOf('+') != 0
 }
+
+//************ Deviation table ********
 function createDeviationTable(tag, className) {
     var table = '<table width="auto" class="deviation-table"><thead style="text-align: center;"><tr>';
     for (i = 0; i < 4; i++) {
@@ -444,43 +586,4 @@ function getDeviation(kk) {
     kk = kk * Math.PI / 180;
     var x = 0.2625 - 3.8607 * Math.sin(kk) + 1.012 * Math.cos(kk) + 0.075 * Math.sin(2 * kk) + 0.5 * Math.cos(2 * kk)
     return Math.round(x * 10) / 10;
-}
-function showSign(id) {
-    var value = parseFloat(content.querySelector('#' + id + '_hidden').value);
-    if (value > 0) content.querySelector('#' + id).innerText = '+';
-}
-function replaceHidden(id, values) {
-    var value = content.querySelector('#' + id + '_hidden').value;
-    content.querySelector('#' + id).innerText = values[value];
-}
-function showInputSign() {
-    var input = content.querySelector('span.answer input');
-    if (!input.getAttribute('readonly')) {
-        var v = input.value;
-        if (v && v.indexOf('-') != 0) input.value = '+' + v;
-    }
-}
-function showCorrectAnswerSign() {
-    var div = content.querySelector('div.rightanswer');
-    if (div) {
-        var text = div.innerText;
-        if (text.indexOf('-') == -1) div.innerText = text.replace(': ', ': +');
-    }
-}
-function replaceNegativeText(positive, negative) {
-    var div = content.querySelector('div.rightanswer');
-    if (div) {
-        var text = div.innerText;
-        if (text.indexOf('-') > -1) div.innerText = text.replace('-', '').replace(positive, negative);
-    }
-}
-function replaceNegativeInput(negative) {
-    var input = content.querySelector('span.answer input');
-    if (!input.readonly) {
-        var v = input.value;
-        if (v.indexOf('-') == 0) {
-            input.value = v.substring(1);
-            content.querySelector('span.answer select').value = negative;
-        }
-    }
 }
