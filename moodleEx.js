@@ -157,7 +157,7 @@ function centerDialog(box) {
 let deg_input_html = "<input id='deg_input_idSuffix' type='number' maxlength='3' min='0' max='180' inputmode='numeric' style='width:80px;text-align:right;' class='form-control d-inline'>",
     min_input_html = "<input id='min_input_idSuffix' type='number' maxlength='4' min='0' max='60' inputmode='decimal' step='0.1' style='width:80px;text-align:right;' class='form-control d-inline'>",
     time_input_html = "<input id='time_input_idSuffix' type='time' class='form-control d-inline' style='width:auto'>",
-    signed_input_html = "<input id='signed_input_idSuffix' size='30' type='text' style='width:30%; text-align: right' class='form-control d-inline'>",
+    input_html = "<input id='signed_input_idSuffix' size='30' type='text' style='width:30%; text-align: right' class='form-control d-inline'>",
     rhumbs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
     quoters = ['NE', 'SE', 'SW', 'NW'];
 function randomId(length = 6) {
@@ -194,7 +194,7 @@ function isPosition(type) {
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
-    const arr = ['quoter', 'semiN', 'semiS', 'rhumb', 'nearestRhumb', 'ew'];
+    const arr = ['circular', 'quoter', 'semiN', 'semiS', 'rhumb', 'nearestRhumb', 'ew'];
     return arr.indexOf(type) !== -1;
 }
 function positionLetter(type) {
@@ -215,6 +215,8 @@ function getDirectionFormat(type, value) {
         v = Math.round(v * n) / n;
     }
     switch (type) {
+        case 'circular':
+            return { 'prefix': '', 'value': v, 'suffix': '', 'options': [] };
         case 'quoter':
             let n = Math.floor(v / 90),
                 angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v;
@@ -229,7 +231,7 @@ function getDirectionFormat(type, value) {
             return { 'prefix': '', 'value': v, 'suffix': rhumbs[v], 'options': rhumbs };
         case 'nearestRhumb':
             let rhumbNumber = Math.round(v * rhumbs.length / 360);
-            return { 'prefix': '', 'value': rhumbNuber, 'suffix': rhumbs[rhumbNumber], 'options': rhumbs };
+            return { 'prefix': '', 'value': rhumbNumber, 'suffix': rhumbs[rhumbNumber], 'options': rhumbs };
         case 'ew':
             return { 'prefix': '', 'value': Math.abs(v), 'suffix': (v < 0) ? 'W' : 'E', 'options': ['E', 'W'] };
         default:
@@ -241,6 +243,8 @@ function parseDirection(type, prefixVal, value, suffixVal) {
         v = parseFloat(str_val);
     if (!isDirection(type) || isNaN(v)) return str_val;
     switch (type) {
+        case 'circular':
+            return v;
         case 'quoter':
             return (suffixVal == 0) ? v : (suffixVal == 1) ? 180 - v : (suffixVal == 2) ? v + 180 : 360 - v;
         case 'semiN':
@@ -294,21 +298,6 @@ function formatDirection(value, type, units = '') {
     let f = getDirectionFormat(type, value);
     if (isNaN(f.value)) return f.suffix;
     return f.prefix + f.value + units + f.suffix;
-    //let str_val = value.toString(),
-    //    v = parseFloat(str_val.replace(',', '.'));
-    //if (isNaN(v)) return str_val;
-    //if (type != 'ew') v = (360 + v) % 360;
-    //if (type == 'quoter') {
-    //    let n = Math.floor(v / 90),
-    //        angle = (n == 0) ? v : (n == 1) ? 180 - v : (n == 2) ? v - 180 : 360 - v
-    //    return angle + units + quoters[n];
-    //}
-    //else if (type == 'semiN') return 'N' + (v > 180) ? (360 - v) + units + 'W' : v + units + 'E'
-    //else if (type == 'semiS') return 'S' + (v > 180) ? (v - 180) + units + 'W' : (180 - v) + units + 'E'
-    //else if (type == 'nearestRhumb') return rhumbs[Math.round(v * rhumbs.length / 360)];
-    //else if (type == 'rhumb') return rhumbs[v]
-    //else if (type == 'ew') return (str_val.indexOf('-') == 0) ? str_val.replace('-', '') + units + '​W' : str_val + units + 'E';
-    //else return str_val;
 }
 function formatSigned(value, units = '') {
     let v = parseFloat(value.replace(',', '.'));
@@ -405,7 +394,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
         input.parentNode.insertBefore(selectFirst, input);
     }
     if (type != 'rhumb' && type != 'nearistRhumb') {
-        input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
+        input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
     }
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (units) {
@@ -481,7 +470,7 @@ function applySignedInput(answerContainer, units = '') {
     let input = answerContainer.querySelector('input'),
         idSuffix = randomId();
     input.style.setProperty('display', 'none', 'important');
-    input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
+    input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
     if (units) {
         if (units == '°' || units == '\'')
             input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
@@ -513,44 +502,6 @@ function applySignedInput(answerContainer, units = '') {
             default:
                 input.value = inp.value;
         }
-    });
-}
-function applyEWInput(answerContainer, units = '') {
-    let input = answerContainer.querySelector('input'),
-        select = document.createElement('select'),
-        idSuffix = randomId();
-    input.style.setProperty('display', 'none', 'important');
-    select.id = 'ew_sgn_' + idSuffix;
-    select.className += 'select form-select d-inline-block';
-    select.add(new Option('E', '1'));
-    select.add(new Option('W', '-1'));
-    input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
-    if (units) {
-        if (units == '°' || units == '\'')
-            input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
-        else
-            input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
-    }
-    input.parentNode.insertBefore(select, input);
-    let inp = content.querySelector('#signed_input_' + idSuffix);
-    if (input.value) {
-        let v = parseFloat(input.value.replace(',', '.'));
-        if (!isNaN(v)) {
-            let sgn = (v < 0) ? -1 : 1;
-            inp.value = Math.abs(v);
-            select.value = sgn;
-        }
-    }
-    if (input.getAttribute('readonly') || input.disabled) {
-        inp.disabled = true;
-        select.disabled = true;
-    }
-    formatCorrectAnswer(answerContainer, 'ew', units);
-    const form = content.closest('#responseform');
-    form.addEventListener('submit', function () {
-        let d = parseFloat(inp.value.replace(',', '.'));
-        if (!isNaN(d)) d *= parseInt(select.value);
-        input.value = d;
     });
 }
 function missingPlus(value) {
