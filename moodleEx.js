@@ -271,7 +271,7 @@ function formatFloat(value, fractionDigits = 4) {
     return '' + Math.round(v * n) / n;
 }
 function formatPosition(value, type) {
-    if (!isPosition(type)) return;
+    if (!isPosition(type)) return '?' + value;
     let letter = positionLetter(type),
         v = getFloat(value),
         sgn = (v < 0) ? letter.negative : letter.positive;
