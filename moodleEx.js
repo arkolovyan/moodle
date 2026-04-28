@@ -163,6 +163,19 @@ let deg_input_html = "<input id='deg_input_idSuffix' type='number' maxlength='3'
 function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
 };
+function getFloat(value) {
+    let str_val = ('' + value).replace(',', '.'),
+        v = parseFloat(str_val);
+    if (!isNaN(v)) {
+        let decimalPos = str_val.indexOf('.'),
+            fractionDigits = (decimalPos > 0) ? 0 : str_val.length - decimalPos;
+        if (fractionDigits > 0) {
+            let n = Math.pow(10, fractionDigits)
+            v = Math.round(v * n) / n;
+        }
+    }
+    return v
+}
 function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
@@ -204,16 +217,9 @@ function positionLetter(type) {
     else if (type == 'deltaLon') return { 'positive': 'к E', 'negative': 'к W' }
 }
 function getDirectionFormat(type, value) {
-    let str_val = ('' + value).replace(',', '.'),
-        v = parseFloat(str_val);
-    if (!isDirection(type) || isNaN(v)) return { 'prefix': '', 'value': NaN, 'suffix': str_val, 'options': [] };
+    let v = getFloat(value);
+    if (!isDirection(type) || isNaN(v)) return { 'prefix': '', 'value': NaN, 'suffix': '' + value, 'options': [] };
     if (type != 'ew') v = (360 + v) % 360;
-    let decimalPos = str_val.indexOf('.'),
-        fractionDigits = (decimalPos > 0) ? 0 : str_val.length - decimalPos;
-    if (fractionDigits > 0) {
-        let n = Math.pow(10, fractionDigits)
-        v = Math.round(v * n) / n;
-    }
     switch (type) {
         case 'circular':
             return { 'prefix': '', 'value': v, 'suffix': '', 'options': [] };
@@ -235,29 +241,23 @@ function getDirectionFormat(type, value) {
         case 'ew':
             return { 'prefix': '', 'value': Math.abs(v), 'suffix': (v < 0) ? 'W' : 'E', 'options': ['E', 'W'] };
         default:
-            return { 'prefix': '', 'value': NaN, 'suffix': str_val, 'options': [] };
+            return { 'prefix': '', 'value': NaN, 'suffix': '' + value, 'options': [] };
     }
 }
 function parseDirection(type, prefixVal, value, suffixVal) {
-    let str_val = ('' + value).replace(',', '.'),
-        v = parseFloat(str_val);
-    if (!isDirection(type) || isNaN(v)) return str_val;
+    let v = getFloat(value);
+    if (!isDirection(type) || isNaN(v)) return value;
     switch (type) {
-        case 'circular':
-            return v;
-        case 'quoter':
-            return (suffixVal == 0) ? v : (suffixVal == 1) ? 180 - v : (suffixVal == 2) ? v + 180 : 360 - v;
+        case 'circular': return v;
+        case 'quoter': return (suffixVal == 0) ? v : (suffixVal == 1) ? 180 - v : (suffixVal == 2) ? v + 180 : 360 - v;
         case 'semiN':
         case 'semiS':
-            if(prefixVal==1) return (360 + v * suffixVal) % 360
+            if (prefixVal == 1) return (360 + v * suffixVal) % 360
             else if (prefixVal == -1) return (180 - v * suffixVal);
         case 'rhumb':
-        case 'nearestRhumb':
-            return suffixVal * 22.5;
-        case 'ew':
-            return v * suffixVal;
-        default:
-            return str_val;
+        case 'nearestRhumb': return suffixVal * 22.5;
+        case 'ew': return v * suffixVal;
+        default: return value;
     }
 }
 //************* Formatting ************
@@ -276,7 +276,7 @@ function formatValue(value, type, units = '') {
 function formatPosition(value, type) {
     if (!isPosition(type)) return;
     let letter = positionLetter(type),
-        v = parseFloat(value.replace(',', '.')),
+        v = getFloat(value),
         sgn = (v < 0) ? letter.negative : letter.positive;
     v = Math.abs(v);
     let deg = Math.floor(v),
@@ -286,7 +286,7 @@ function formatPosition(value, type) {
     return deg + '°' + mins + '\'' + sgn;
 }
 function formatTime(value, separator = ':') {
-    let v = parseFloat(value.toString().replace(",", "."));
+    let v = getFloat(value);
     if (isNaN(v) || v < 0 || v > 24) return value;
     let hours = Math.floor(v),
         mins = Math.round((v - hours) * 60);
@@ -300,8 +300,8 @@ function formatDirection(value, type, units = '') {
     return f.prefix + f.value + units + f.suffix;
 }
 function formatSigned(value, units = '') {
-    let v = parseFloat(value.replace(',', '.'));
-    if (isNaN(v)) return value.toString();
+    let v = getFloat(value);
+    if (isNaN(v)) return '' + value;
     return (v > 0) ? '+' + v + units : v + units;
 }
 function formatNumericSpans(fractionDigits) {
@@ -351,7 +351,7 @@ function applyPositionInput(answerContainer, type) {
     let input_deg = content.querySelector('#deg_input_' + idSuffix),
         input_min = content.querySelector('#min_input_' + idSuffix);
     if (input.value) {
-        let v = parseFloat(input.value.replace(',', '.'));
+        let v = getFloat(input.value);
         if (!isNaN(v)) {
             let sgn = (v < 0) ? -1 : 1;
             v = Math.abs(v)
@@ -372,7 +372,7 @@ function applyPositionInput(answerContainer, type) {
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let d = parseInt(input_deg.value),
-            m = parseFloat(input_min.value.replace(',', '.')) / 60,
+            m = getFloat(input_min.value) / 60,
             degs = d + m;
         if (!isNaN(degs)) degs *= parseInt(select.value);
         input.value = degs;
@@ -485,7 +485,7 @@ function applySignedInput(answerContainer, units = '') {
         let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
-            if (val > 999999) inp.value = parseFloat(inp_str.replace('9999999', ''));
+            if (val > 999999) inp.value = getFloat(inp_str.replace('9999999', ''));
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + val;
         }
     }
