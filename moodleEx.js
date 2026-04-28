@@ -304,12 +304,12 @@ function formatTime(value, separator = ':') {
 function formatDirection(value, type, units = '') {
     let f = getDirectionFormat(type, value);
     if (isNaN(f.value)) return f.suffix;
-    return f.prefix + f.value + units + f.suffix;
+    return f.prefix + fixedFloat(f.value) + units + f.suffix;
 }
 function formatSigned(value, units = '') {
     let v = getFloat(value);
     if (isNaN(v)) return '' + value;
-    return (v > 0) ? '+' + v + units : v + units;
+    return (v > 0) ? '+' + fixedFloat(v) + units : v + units;
 }
 function formatNumericSpans(fractionDigits) {
     let n = Math.pow(10, fractionDigits);
@@ -317,7 +317,7 @@ function formatNumericSpans(fractionDigits) {
         let v = parseFloat(el.innerText);
         if (!isNaN(v)) {
             let val = Math.round(v * n) / n;
-            el.innerText = val.toString();
+            el.innerText = '' + val;
         }
     }
 }
