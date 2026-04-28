@@ -261,7 +261,8 @@ function formatValue(value, type, units = '') {
     if (isPosition(type)) return formatPosition(value, type)
     else if (isDirection(type)) return formatDirection(value, type, units)
     else if (type == 'signed') return formatSigned(value, units);
-    else if (type == 'time') return formatTime(value);
+    else if (type == 'time') return formatTime(value)
+    else return type;
 }
 function formatFloat(value, fractionDigits = 4) {
     let str_val = ('' + value).replace(',', '.'),
