@@ -164,24 +164,7 @@ function randomId(length = 6) {
     return Math.random().toString(36).substring(2, length + 2);
 };
 function getFloat(value) {
-    let str_val = ('' + value).replace(',', '.'),
-        v = parseFloat(str_val);
-    if (!isNaN(v)) {
-        let decimalPos = str_val.indexOf('.'),
-            fractionDigits = (decimalPos > 0) ? 0 : str_val.length - decimalPos;
-        if (fractionDigits > 0) {
-            let n = Math.pow(10, fractionDigits)
-            v = Math.round(v * n) / n;
-        }
-    }
-    return v
-}
-function fixedFloat(value, fractionDigits = 4) {
-    let str_val = ('' + value).replace(',', '.'),
-        v = parseFloat(str_val);
-    if (isNaN(v)) return str_val;
-    let n = Math.pow(10, fractionDigits)
-    return '' + Math.round(v * n) / n;
+    return parseFloat(('' + value).replace(',', '.'));
 }
 function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
@@ -210,7 +193,7 @@ function clozeQuestion(units) {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    const arr = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
+    const arr = ['lаtitude', 'longitude', 'deltaLat', 'deltaLon'];
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
@@ -279,7 +262,13 @@ function formatValue(value, type, units = '') {
     else if (isDirection(type)) return formatDirection(value, type, units)
     else if (type == 'signed') return formatSigned(value, units);
     else if (type == 'time') return formatTime(value);
-    else return value;
+}
+function formatFloat(value, fractionDigits = 4) {
+    let str_val = ('' + value).replace(',', '.'),
+        v = parseFloat(str_val);
+    if (isNaN(v)) return str_val;
+    let n = Math.pow(10, fractionDigits)
+    return '' + Math.round(v * n) / n;
 }
 function formatPosition(value, type) {
     if (!isPosition(type)) return;
@@ -295,7 +284,7 @@ function formatPosition(value, type) {
 }
 function formatTime(value, separator = ':') {
     let v = getFloat(value);
-    if (isNaN(v) || v < 0 || v > 24) return value;
+    if (isNaN(v) || v < 0 || v > 24) return '' + value;
     let hours = Math.floor(v),
         mins = Math.round((v - hours) * 60);
     if (hours < 10) hours = '0' + hours;
@@ -306,21 +295,16 @@ function formatDirection(value, type, units = '') {
     let f = getDirectionFormat(type, value);
     if (isNaN(f.value)) return f.suffix;
     if (type == 'rhumb' || type == 'nearestRhumb') return f.suffix;
-    return f.prefix + fixedFloat(f.value) + units + f.suffix;
+    return f.prefix + formatFloat(f.value) + units + f.suffix;
 }
 function formatSigned(value, units = '') {
     let v = getFloat(value);
     if (isNaN(v)) return '' + value;
-    return (v > 0) ? '+' + fixedFloat(v) + units : v + units;
+    return (v > 0) ? '+' + formatFloat(v) + units : formatFloat(v) + units;
 }
-function formatNumericSpans(fractionDigits) {
-    let n = Math.pow(10, fractionDigits);
+function formatNumericSpans() {
     for (el of content.querySelectorAll('span.numeric')) {
-        let v = parseFloat(el.innerText);
-        if (!isNaN(v)) {
-            let val = Math.round(v * n) / n;
-            el.innerText = '' + val;
-        }
+        el.innerText = formatFloat(el.innerText);
     }
 }
 function formatCorrectAnswer(answerContainer, type, units = '') {
@@ -429,7 +413,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
     if (input.value) {
         f = getDirectionFormat(type, input.value);
         if (!isNaN(f.value)) {
-            if(inp) inp.value = fixedFloat(f.value);
+            if(inp) inp.value = formatFloat(f.value);
             if (f.prefix) {
                 for (let i = 0; i < selectFirst.options.length; i++) {
                     if (selectFirst.options[i].text === f.prefix) {
@@ -453,7 +437,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let v = (inp) ? inp.value : '0';
-        input.value = fixedFloat(parseDirection(type,selectFirst.value,v,selectLast.value));
+        input.value = formatFloat(parseDirection(type,selectFirst.value,v,selectLast.value));
     });
 
 }
@@ -494,8 +478,8 @@ function applySignedInput(answerContainer, units = '') {
         let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
-            if (val > 999999) inp.value = fixedFloat(inp_str.replace('9999999', ''));
-            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + fixedFloat(val);
+            if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''));
+            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
     formatCorrectAnswer(answerContainer, 'signed', units);
@@ -554,7 +538,7 @@ function applySignedInput(answerContainer, units = '') {
 function missingPlus(value) {
     let str_val = value.toString(),
         v = parseFloat(str_val.replace(",", "."));
-    return !isNaN(v) && v > 0 && str_val.indexOf('+') != 0
+    return !isNaN(v) && v > 0 && str_val.indexOf('+') != 0;
 }
 
 //************ Deviation table ********
