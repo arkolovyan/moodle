@@ -176,6 +176,13 @@ function getFloat(value) {
     }
     return v
 }
+function fixedFloat(value, fractionDigits = 4) {
+    let str_val = ('' + value).replace(',', '.'),
+        v = parseFloat(str_val);
+    if (isNaN(v)) return str_val;
+    let n = Math.pow(10, fractionDigits)
+    return '' + Math.round(v * n) / n;
+}
 function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
@@ -420,7 +427,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
     if (input.value) {
         f = getDirectionFormat(type, input.value);
         if (!isNaN(f.value)) {
-            if(inp) inp.value = f.value;
+            if(inp) inp.value = fixedFloat(f.value);
             if (f.prefix) {
                 for (let i = 0; i < selectFirst.options.length; i++) {
                     if (selectFirst.options[i].text === f.prefix) {
@@ -444,7 +451,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
     const form = content.closest('#responseform');
     form.addEventListener('submit', function () {
         let v = (inp) ? inp.value : '0';
-        input.value = parseDirection(type,selectFirst.value,v,selectLast.value);
+        input.value = fixedFloat(parseDirection(type,selectFirst.value,v,selectLast.value));
     });
 
 }
@@ -485,8 +492,8 @@ function applySignedInput(answerContainer, units = '') {
         let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
-            if (val > 999999) inp.value = getFloat(inp_str.replace('9999999', ''));
-            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + val;
+            if (val > 999999) inp.value = fixedFloat(inp_str.replace('9999999', ''));
+            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + fixedFloat(val);
         }
     }
     formatCorrectAnswer(answerContainer, 'signed', units);
@@ -504,6 +511,44 @@ function applySignedInput(answerContainer, units = '') {
         }
     });
 }
+//function applyEWInput(answerContainer, units = '') {
+//    let input = answerContainer.querySelector('input'),
+//        select = document.createElement('select'),
+//        idSuffix = randomId();
+//    input.style.setProperty('display', 'none', 'important');
+//    select.id = 'ew_sgn_' + idSuffix;
+//    select.className += 'select form-select d-inline-block';
+//    select.add(new Option('E', '1'));
+//    select.add(new Option('W', '-1'));
+//    input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
+//    if (units) {
+//        if (units == '°' || units == '\'')
+//            input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
+//        else
+//            input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
+//    }
+//    input.parentNode.insertBefore(select, input);
+//    let inp = content.querySelector('#signed_input_' + idSuffix);
+//    if (input.value) {
+//        let v = parseFloat(input.value.replace(',', '.'));
+//        if (!isNaN(v)) {
+//            let sgn = (v < 0) ? -1 : 1;
+//            inp.value = Math.abs(v);
+//            select.value = sgn;
+//        }
+//    }
+//    if (input.getAttribute('readonly') || input.disabled) {
+//        inp.disabled = true;
+//        select.disabled = true;
+//    }
+//    formatCorrectAnswer(answerContainer, 'ew', units);
+//    const form = content.closest('#responseform');
+//    form.addEventListener('submit', function () {
+//        let d = parseFloat(inp.value.replace(',', '.'));
+//        if (!isNaN(d)) d *= parseInt(select.value);
+//        input.value = d;
+//    });
+//}
 function missingPlus(value) {
     let str_val = value.toString(),
         v = parseFloat(str_val.replace(",", "."));
