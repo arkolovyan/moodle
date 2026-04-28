@@ -354,9 +354,9 @@ function applyPositionInput(answerContainer, type) {
     select.add(new Option(letter.positive, '1'));
     select.add(new Option(letter.negative, '-1'));
     input.insertAdjacentHTML('beforebegin', deg_input_html.replace('idSuffix', idSuffix));
-    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>°</span>");
+    input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>°</span>");
     input.insertAdjacentHTML('beforebegin', min_input_html.replace('idSuffix', idSuffix));
-    input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>\'</span>");
+    input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>\'</span>");
     input.parentNode.insertBefore(select, input);
     input.style.setProperty('display', 'none', 'important');
     let input_deg = content.querySelector('#deg_input_' + idSuffix),
@@ -410,7 +410,7 @@ function applyDirectionInput(answerContainer, type, units = '') {
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (units) {
         if (units == '°' || units == '\'')
-            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
         else
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
@@ -484,7 +484,7 @@ function applySignedInput(answerContainer, units = '') {
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     if (units) {
         if (units == '°' || units == '\'')
-            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
         else
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
@@ -527,7 +527,7 @@ function applyEWInput(answerContainer, units = '') {
     input.insertAdjacentHTML('beforebegin', signed_input_html.replace('idSuffix', idSuffix));
     if (units) {
         if (units == '°' || units == '\'')
-            input.insertAdjacentHTML('beforebegin', "<span style='line-height:4px;vertical-align:top;'>" + units + "</span>");
+            input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
         else
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
