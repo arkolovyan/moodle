@@ -222,6 +222,7 @@ function positionLetter(type) {
     else if (type == 'longitude') return { 'positive': 'E', 'negative': 'W' }
     else if (type == 'deltaLat') return { 'positive': 'к N', 'negative': 'к S' }
     else if (type == 'deltaLon') return { 'positive': 'к E', 'negative': 'к W' }
+    else alert(type);
 }
 function getDirectionFormat(type, value) {
     let v = getFloat(value);
@@ -279,7 +280,7 @@ function formatValue(value, type, units = '') {
     else if (isDirection(type)) return formatDirection(value, type, units)
     else if (type == 'signed') return formatSigned(value, units);
     else if (type == 'time') return formatTime(value);
-    else alert(type);
+    else return value;
 }
 function formatPosition(value, type) {
     if (!isPosition(type)) return;
