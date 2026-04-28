@@ -304,6 +304,7 @@ function formatTime(value, separator = ':') {
 function formatDirection(value, type, units = '') {
     let f = getDirectionFormat(type, value);
     if (isNaN(f.value)) return f.suffix;
+    if (type == 'rhumb' || type == 'nearestRhumb') return f.suffix;
     return f.prefix + fixedFloat(f.value) + units + f.suffix;
 }
 function formatSigned(value, units = '') {
