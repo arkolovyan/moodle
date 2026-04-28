@@ -193,7 +193,6 @@ function clozeQuestion(units) {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    alert(type);
     const arr = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
     return arr.indexOf(type) > -1;
 }
