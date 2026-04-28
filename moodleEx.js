@@ -193,8 +193,8 @@ function clozeQuestion(units) {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    const arr = ['lаtitude', 'longitude', 'deltaLat', 'deltaLon'];
-    return arr.indexOf(type) !== -1;
+    const arr = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
+    return arr.indexOf(type) > -1;
 }
 function isDirection(type) {
     const arr = ['circular', 'quoter', 'semiN', 'semiS', 'rhumb', 'nearestRhumb', 'ew'];
