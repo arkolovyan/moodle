@@ -281,7 +281,7 @@ function formatValue(value, type, units = '') {
     else if (type == 'time') return formatTime(value);
 }
 function formatPosition(value, type) {
-    if (!isPosition(type)) return;
+    //if (!isPosition(type)) return;
     let letter = positionLetter(type),
         v = getFloat(value),
         sgn = (v < 0) ? letter.negative : letter.positive;
