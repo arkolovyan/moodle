@@ -210,7 +210,7 @@ function clozeQuestion(units) {
     return (n < subquestions.length);
 }
 function isPosition(type) {
-    const arr = ['lаtitude', 'longitude', 'deltaLat', 'deltaLon'];
+    const arr = ['latitude', 'longitude', 'deltaLat', 'deltaLon'];
     return arr.indexOf(type) !== -1;
 }
 function isDirection(type) {
@@ -279,9 +279,10 @@ function formatValue(value, type, units = '') {
     else if (isDirection(type)) return formatDirection(value, type, units)
     else if (type == 'signed') return formatSigned(value, units);
     else if (type == 'time') return formatTime(value);
+    else alert(type);
 }
 function formatPosition(value, type) {
-    //if (!isPosition(type)) return;
+    if (!isPosition(type)) return;
     let letter = positionLetter(type),
         v = getFloat(value),
         sgn = (v < 0) ? letter.negative : letter.positive;
