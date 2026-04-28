@@ -228,8 +228,8 @@ function getDirectionFormat(type, value) {
         case 'rhumb':
             return { 'prefix': '', 'value': v, 'suffix': rhumbs[v], 'options': rhumbs };
         case 'nearestRhumb':
-            let n = Math.round(v * rhumbs.length / 360);
-            return { 'prefix': '', 'value': n, 'suffix': rhumbs[n], 'options': rhumbs };
+            let rhumbNumber = Math.round(v * rhumbs.length / 360);
+            return { 'prefix': '', 'value': rhumbNuber, 'suffix': rhumbs[rhumbNumber], 'options': rhumbs };
         case 'ew':
             return { 'prefix': '', 'value': Math.abs(v), 'suffix': (v < 0) ? 'W' : 'E', 'options': ['E', 'W'] };
         default:
