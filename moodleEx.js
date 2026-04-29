@@ -166,6 +166,9 @@ function randomId(length = 6) {
 function getFloat(value) {
     return parseFloat(('' + value).replace(',', '.'));
 }
+function normalizeAngle(value) {
+    return (360 + value) % 360
+}
 function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
     if (!answer) return false;
@@ -209,7 +212,7 @@ function positionLetter(type) {
 function getDirectionFormat(type, value) {
     let v = getFloat(value);
     if (!isDirection(type) || isNaN(v)) return { 'prefix': '', 'value': NaN, 'suffix': '' + value, 'options': [] };
-    if (type != 'ew') v = (360 + v) % 360;
+    if (type != 'ew') v = normalizeAngle(v);
     switch (type) {
         case 'circular':
             return { 'prefix': '', 'value': v, 'suffix': '', 'options': [] };
