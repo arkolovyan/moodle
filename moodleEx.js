@@ -167,7 +167,11 @@ function getFloat(value) {
     return parseFloat(('' + value).replace(',', '.'));
 }
 function normalizeAngle(value) {
-    return (360 + value) % 360
+    return (360 + getFloat(value)) % 360
+}
+function normalizeLongitude(value) {
+    let v = normalizeAngle(value);
+    return (v > 180) ? v - 360 : v;
 }
 function numericQuestion(type, units = '') {
     const answer = content.querySelector('span.answer');
@@ -275,10 +279,10 @@ function formatFloat(value, fractionDigits = 4) {
     return '' + Math.round(v * n) / n;
 }
 function formatPosition(value, type) {
-    if (!isPosition(type)) return '?' + value;
+    if (!isPosition(type)) return value;
     let letter = positionLetter(type),
-        v = getFloat(value),
-        sgn = (v < 0) ? letter.negative : letter.positive;
+        v = (type == 'longitude') ? normalizeLongitude(value) : getFloat(value);
+    let sgn = (v < 0) ? letter.negative : letter.positive;
     v = Math.abs(v);
     let deg = Math.floor(v),
         mins = Math.round((v - deg) * 600) / 10;
