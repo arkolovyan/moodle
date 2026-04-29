@@ -309,8 +309,8 @@ function formatNumericSpans() {
     }
 }
 function formatWindAlpha(courseClass, alphaClass) {
-    let elCourse = documenty.querySelector('.' + courseClass),
-        elAlpha = documenty.querySelector('.' + alphaClass),
+    let elCourse = document.querySelector('.' + courseClass),
+        elAlpha = document.querySelector('.' + alphaClass),
         course = parseInt(elCourse.innerText),
         wind_alpha = parseInt(elAlpha.innerText),
         wind_dir = normalizeAngle((wind_alpha < 0) ? course + 90 : course - 90),
