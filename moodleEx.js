@@ -308,6 +308,15 @@ function formatNumericSpans() {
         el.innerText = formatFloat(el.innerText);
     }
 }
+function formatWindAlpha(courseClass, alphaClass) {
+    let elCourse = documenty.querySelector('.' + courseClass),
+        elAlpha = documenty.querySelector('.' + alphaClass),
+        course = parseInt(elCourse.innerText),
+        wind_alpha = parseInt(elAlpha.innerText),
+        wind_dir = normalizeAngle((wind_alpha < 0) ? course + 90 : course - 90),
+        rhumb = rhumbs[Math.round(wind_dir * rhumbs.length / 360)];
+    elAlpha.innerText = rhumb + ' α = ' + Math.abs(wind_alpha);
+}
 function formatCorrectAnswer(answerContainer, type, units = '') {
     const popUp = answerContainer.querySelector('a');
     if (popUp) {
