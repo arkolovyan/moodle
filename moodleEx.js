@@ -335,8 +335,7 @@ function formatCorrectAnswer(answerContainer, type, options=null) {
 //#region ************* Parsing ************
 function parsePosition(value) {
     let v = getFloat(value);
-    alert('N***'+v);
-    if (!isNaN(v)) return null;
+    if (isNaN(v)) return null;
     let sgn = (v < 0) ? -1 : 1;
     v = Math.abs(v)
     let deg = Math.floor(v),
