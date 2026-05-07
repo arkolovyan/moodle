@@ -334,7 +334,7 @@ function formatCorrectAnswer(answerContainer, type, options=null) {
 
 //#region ************* Parsing ************
 function parsePosition(value) {
-    alert('parse_'+value);
+    alert(value);
     let v = getFloat(value);
     if (!isNaN(v)) return null;
     let sgn = (v < 0) ? -1 : 1;
@@ -420,6 +420,7 @@ function applyPositionInput(answerContainer, type) {
     let input_deg = content.querySelector('#deg_input_' + idSuffix),
         input_min = content.querySelector('#min_input_' + idSuffix);
     if (input.value) {
+        alert(input.value);
         let v = parsePosition(input.value);
         if (v) {
             input_deg.value = v.deg;
