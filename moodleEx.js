@@ -420,6 +420,7 @@ function applyPositionInput(answerContainer, type) {
         input_min = content.querySelector('#min_input_' + idSuffix);
     if (input.value) {
         let v = parsePosition(input.value);
+        alert(v);
         if (v) {
             input_deg.value = v.deg;
             input_min.value = v.mins;
