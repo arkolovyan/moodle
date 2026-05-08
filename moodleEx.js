@@ -605,7 +605,7 @@ function applySignedInput(answerContainer, options) {
             inp.value = input.value.replace('9999999​​', '')
         else{
             let val = getFloat(input.value);
-            if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
+            if (!isNaN(val) && val > 0 && input.value.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
     formatCorrectAnswer(answerContainer, 'signed', options);
