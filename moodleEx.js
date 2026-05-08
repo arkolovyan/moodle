@@ -602,7 +602,9 @@ function applySignedInput(answerContainer, options) {
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         if (input.value.startsWith('9999999​')) {
+            alert(input.value);
             inp.value = input.value.replace('9999999​​', '');
+            alert(inp.value);
             alert('start');
         }
         else{
