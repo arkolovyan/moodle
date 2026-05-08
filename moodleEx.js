@@ -603,7 +603,9 @@ function applySignedInput(answerContainer, options) {
     if (input.value) {
         if (input.value.startsWith('9999999​')) {
             alert(input.value);
-            inp.value = input.value.replace('9999999​​', '');
+            let str_val=input.value.replace('9999999​​', '');
+            alert(str_val);
+            inp.value = str_val;
             alert(inp.value);
             alert('start');
         }
