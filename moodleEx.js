@@ -587,7 +587,7 @@ function applyDateInput(answerContainer, options) {
 function applySignedInput(answerContainer, options) {
     let input = answerContainer.querySelector('input');
     if (!input) return;
-    input.style.setProperty('display', 'none', 'important');
+    //input.style.setProperty('display', 'none', 'important');
     let idSuffix = randomId(),
         units = options?.units || '';
     input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
@@ -606,7 +606,6 @@ function applySignedInput(answerContainer, options) {
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
             if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''))
-            else if (inp_str.startsWith('12345')) inp.value = formatFloat(inp_str.replace('12345', ''))
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
@@ -615,7 +614,7 @@ function applySignedInput(answerContainer, options) {
     form?.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'finish':
-                if (missingPlus(inp.value)) input.value = '12345' + inp.value;
+                if (missingPlus(inp.value)) input.value = '​' + inp.value;
                 break;
             case 'save':
                 if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
