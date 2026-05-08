@@ -599,9 +599,7 @@ function applySignedInput(answerContainer, options) {
     }
     let inp = content.querySelector('#signed_input_' + idSuffix);
     inp.value = input.value;
-    if (input.getAttribute('readonly') || input.disabled)
-        inp.disabled = true;
-    }
+    if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
@@ -609,6 +607,7 @@ function applySignedInput(answerContainer, options) {
             if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''))
             else if (inp_str.startsWith('12345')) inp.value = inp_str.replace('12345', '')
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
+        }
     }
     formatCorrectAnswer(answerContainer, 'signed', options);
     const form = content.closest('#responseform');
