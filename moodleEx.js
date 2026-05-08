@@ -588,6 +588,7 @@ function applySignedInput(answerContainer, options) {
     let input = answerContainer.querySelector('input');
     if (!input) return;
     input.style.setProperty('display', 'none', 'important');
+    input.style.color = 'transparent';
     let idSuffix = randomId(),
         units = options?.units || '';
     input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
