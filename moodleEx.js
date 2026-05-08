@@ -602,7 +602,7 @@ function applySignedInput(answerContainer, options) {
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         alert(input.value);
-        if (input.value.startsWith('error​')) {
+        if (input.value.startsWith('error')) {
             let str_val=input.value.replace('error', 'e');
             alert(str_val);
             inp.value = str_val;
