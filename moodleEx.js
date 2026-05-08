@@ -616,9 +616,9 @@ function applySignedInput(answerContainer, options) {
             case 'finish':
                 if (missingPlus(inp.value)) input.value = '-9999999' + inp.value;
                 break;
-            case 'save':
-                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
-                break;
+//            case 'save':
+//                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
+//                break;
             default:
                 input.value = inp.value;
         }
