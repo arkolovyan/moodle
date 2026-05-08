@@ -598,7 +598,7 @@ function applySignedInput(answerContainer, options) {
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
     let inp = content.querySelector('#signed_input_' + idSuffix);
-    inp.value = input.value;
+    //inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         if (input.value.startsWith('9999999')) inp.value = input.value.replace('9999999', '')
