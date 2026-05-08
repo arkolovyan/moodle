@@ -601,9 +601,9 @@ function applySignedInput(answerContainer, options) {
     inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
-        if (input.value.startsWith('9999999​')) {
+        if (input.value.startsWith('error​')) {
             alert(input.value);
-            let str_val=input.value.replace('9999999​​', '');
+            let str_val=input.value.replace('error', 'e');
             alert(str_val);
             inp.value = str_val;
             alert(inp.value);
@@ -619,10 +619,10 @@ function applySignedInput(answerContainer, options) {
     form?.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'save':
-                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
+                if (missingPlus(inp.value)) input.value = '999​' + inp.value;
                 break;
             case 'finish':
-                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
+                if (missingPlus(inp.value)) input.value = 'error' + inp.value;
                 break;
             default:
                 input.value = inp.value;
