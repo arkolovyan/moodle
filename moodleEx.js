@@ -616,7 +616,7 @@ function applySignedInput(answerContainer, options) {
     }
     formatCorrectAnswer(answerContainer, 'signed', options);
     const form = content.closest('#responseform');
-    form?.addEventListener('submit', function (event) {
+    form.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'save':
                 if (missingPlus(inp.value)) input.value = '999' + inp.value;
