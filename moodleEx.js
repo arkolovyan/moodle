@@ -603,7 +603,7 @@ function applySignedInput(answerContainer, options) {
     if (input.value) {
         alert(input.value);
         if (input.value.startsWith('error')) {
-            let str_val=input.value.replace('error', 'e');
+            let str_val=input.value.replace('error', '');
             alert(str_val);
             inp.value = str_val;
             alert(inp.value);
