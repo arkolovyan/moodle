@@ -605,7 +605,7 @@ function applySignedInput(answerContainer, options) {
             inp.value = input.value.replace('9999999​​', '')
         else{
             let val = getFloat(input.value);
-            if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
+            if (!isNaN(val) && val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
     formatCorrectAnswer(answerContainer, 'signed', options);
@@ -613,6 +613,8 @@ function applySignedInput(answerContainer, options) {
     form?.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'save':
+                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
+                break;
             case 'finish':
                 if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
                 break;
