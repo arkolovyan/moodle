@@ -614,7 +614,7 @@ function applySignedInput(answerContainer, options) {
     form?.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'finish':
-                if (missingPlus(inp.value)) input.value = '123' + inp.value;
+                if (missingPlus(inp.value)) input.value = '12345' + inp.value;
                 break;
             case 'save':
                 if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
