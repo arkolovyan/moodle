@@ -601,8 +601,8 @@ function applySignedInput(answerContainer, options) {
     inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
-        if (input.value.startsWith('error')) {
-            let str_val=input.value.replace('error', '');
+        if (input.value.startsWith('9999999')) {
+            let str_val=input.value.replace('9999999', '');
             alert(str_val);
             inp.value = str_val;
             alert(inp.value);
@@ -622,7 +622,7 @@ function applySignedInput(answerContainer, options) {
                 break;
             case 'finish':
                 if (missingPlus(inp.value)) {
-                    input.value = 'error' + inp.value;
+                    input.value = '9999999' + inp.value;
                     alert(input.value);
                 }
                 break;
