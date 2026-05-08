@@ -602,7 +602,8 @@ function applySignedInput(answerContainer, options) {
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         if (input.value.startsWith('9999999​')) 
-            inp.value = input.value.replace('9999999​​', '')
+            inp.value = input.value.replace('9999999​​', '');
+            alert('start');
         else{
             let val = getFloat(input.value);
             if (!isNaN(val) && val > 0 && input.value.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
