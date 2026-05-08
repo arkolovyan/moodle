@@ -605,7 +605,7 @@ function applySignedInput(answerContainer, options) {
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
             if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''))
-            elseif (inp_str.startsWith('-9999999')) inp.value = inp_str.replace('-9999999', '')
+            else if (inp_str.startsWith('-9999999')) inp.value = inp_str.replace('-9999999', '')
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
