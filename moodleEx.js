@@ -605,7 +605,8 @@ function applySignedInput(answerContainer, options) {
         let inp_str = input.value.replace(',', '.'),
             val = parseFloat(inp_str);
         if (!isNaN(val)) {
-            if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''));
+            if (val > 999999) inp.value = formatFloat(inp_str.replace('9999999', ''))
+            else if (inp_str.startsWith('12345') inp.value = formatFloat(inp_str.replace('12345', ''))
             else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
