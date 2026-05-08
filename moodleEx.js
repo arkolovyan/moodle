@@ -601,8 +601,8 @@ function applySignedInput(answerContainer, options) {
     inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
+        alert(input.value);
         if (input.value.startsWith('error​')) {
-            alert(input.value);
             let str_val=input.value.replace('error', 'e');
             alert(str_val);
             inp.value = str_val;
