@@ -601,12 +601,11 @@ function applySignedInput(answerContainer, options) {
     inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
-        let inp_str = input.value.replace(',', '.'),
-            val = parseFloat(inp_str);
-        if (!isNaN(val)) {
-            if (val > 999999) inp.value = inp_str.replace('9999999', '')
-            else if (inp_str.startsWith('12345​')) inp.value = inp_str.replace('12345​', '')
-            else if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
+        if (input.value.startsWith('9999999​')) 
+            inp.value = input.value.replace('9999999​​', '')
+        else{
+            let val = getFloat(input.value);
+            if (val > 0 && inp_str.indexOf('+' == -1)) inp.value = '+' + formatFloat(val);
         }
     }
     formatCorrectAnswer(answerContainer, 'signed', options);
@@ -614,10 +613,8 @@ function applySignedInput(answerContainer, options) {
     form?.addEventListener('submit', function (event) {
         switch (event.submitter.name) {
             case 'save':
-                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
-                break;
             case 'finish':
-                if (missingPlus(inp.value)) input.value = '12345​' + inp.value;
+                if (missingPlus(inp.value)) input.value = '9999999​' + inp.value;
                 break;
             default:
                 input.value = inp.value;
