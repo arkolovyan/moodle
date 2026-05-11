@@ -643,7 +643,7 @@ function applyNumericInput(answerContainer, options) {
         if ('maximum' in options) inp.max = options.maximum;
         if ('decimalDigits' in options) inp.step = getNumericStep(options.decimalDigits);
     }
-    if (input.value) inp.value = formatNumeric(input.value,options);
+    if (input.value) inp.value = formatNumeric(input.value,{'decimalDigits':options?.decimalDigits});
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     formatCorrectAnswer(answerContainer, 'numeric', options);
     const form = content.closest('#responseform');
