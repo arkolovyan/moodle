@@ -395,6 +395,7 @@ function numericQuestion(type, options) {
     else if (type == 'time') applyTimeInput(answer, options)
     else if (type == 'date') applyDateInput(answer, options)
     else if (type == 'signed') applySignedInput(answer, options)
+    else if (type == 'numeric') applyNumericInput(answet, options)
     else return false;
     return true;
 }
@@ -599,7 +600,6 @@ function applySignedInput(answerContainer, options) {
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
     let inp = content.querySelector('#signed_input_' + idSuffix);
-    //inp.value = input.value;
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
         if (input.value.startsWith('9999999')) 
