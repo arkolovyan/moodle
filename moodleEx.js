@@ -395,7 +395,7 @@ function numericQuestion(type, options) {
     else if (type == 'time') applyTimeInput(answer, options)
     else if (type == 'date') applyDateInput(answer, options)
     else if (type == 'signed') applySignedInput(answer, options)
-    else if (type == 'numeric') applyNumericInput(answet, options)
+    else if (type == 'numeric') applyNumericInput(answer, options)
     else return false;
     return true;
 }
