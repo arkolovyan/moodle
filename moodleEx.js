@@ -319,7 +319,7 @@ function formatWindAlpha(courseClass, alphaClass) {
         course = parseInt(elCourse.innerText),
         wind_alpha = parseInt(elAlpha.innerText),
         wind_dir = normalizeAngle((wind_alpha < 0) ? course + 90 : course - 90),
-        rhumb = rhumbs[(Math.round(wind_dir * rhumbs.length / 360)) % 32];
+        rhumb = rhumbs[(Math.round(wind_dir * rhumbs.length / 360)) % 16];
     elAlpha.innerText = rhumb + ' α = ' + Math.abs(wind_alpha);
 }
 function formatNumericSpans() {
