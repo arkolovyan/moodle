@@ -268,17 +268,18 @@ function getDirectionFormat(type, value) {
     }
 }
 function formatDirection(value, type, options) {
-    let f = getDirectionFormat(type, value),
-        units = options?.units || '';
+    let f = getDirectionFormat(type, value);
     if (isNaN(f.value)) return f.suffix;
     if (type == 'rhumb' || type == 'nearestRhumb') return f.suffix;
+    let units = options?.units || '';
     return f.prefix + formatFloat(f.value) + units + f.suffix;
 }
 function formatSigned(value, options) {
-    let v = getFloat(value),
-        units = options?.units || '';
+    let v = getFloat(value);
     if (isNaN(v)) return '' + value;
-    return (v > 0) ? '+' + formatFloat(v) + units : formatFloat(v) + units;
+    let units = options?.units || '',
+        digits = options?.decimalDigits || 4;
+    return (v > 0) ? '+' + formatFloat(v, digits) + units : formatFloat(v, digits) + units;
 }
 function formatTime(value, options) {
     let v = parseInt(value);
@@ -321,11 +322,6 @@ function formatWindAlpha(courseClass, alphaClass) {
         wind_dir = normalizeAngle((wind_alpha < 0) ? course + 90 : course - 90),
         rhumb = rhumbs[(Math.round(wind_dir * rhumbs.length / 360)) % 16];
     elAlpha.innerText = rhumb + ' α = ' + Math.abs(wind_alpha);
-}
-function formatNumericSpans() {
-    for (el of content.querySelectorAll('span.numeric')) {
-        el.innerText = formatFloat(el.innerText);
-    }
 }
 function formatCorrectAnswer(answerContainer, type, options) {
     const popUp = answerContainer.querySelector('a');
@@ -477,7 +473,7 @@ function applyDirectionInput(answerContainer, type, options) {
         input.insertAdjacentHTML('beforebegin', input_html.replace('idSuffix', idSuffix));
     }
     let inp = content.querySelector('#signed_input_' + idSuffix),
-        units = options?.units || '';        ;
+        units = options?.units || '';;
     if (units) {
         if (units == '°' || units == '\'')
             input.insertAdjacentHTML('beforebegin', "<span style='line-height:10px;vertical-align:top;'>" + units + "</span>");
@@ -542,7 +538,7 @@ function applyTimeInput(answerContainer, options) {
         if ('maximum' in options) inp.max = options.maximum;
         if ('seconds' in options) inp.step = 1;
     }
-    if (input.value) inp.value = formatTime(input.value, { 'seconds': inp.step == 1,'separator':':' });
+    if (input.value) inp.value = formatTime(input.value, { 'seconds': inp.step == 1, 'separator': ':' });
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     formatCorrectAnswer(answerContainer, 'time', options);
     const form = content.closest('#responseform');
@@ -569,7 +565,7 @@ function applyDateInput(answerContainer, options) {
             inp.addEventListener('change', (e) => {
                 const selectedDate = new Date(e.target.value);
                 if (selectedDate.getFullYear() !== year) {
-                    const monthDay = e.target.value.slice(5); 
+                    const monthDay = e.target.value.slice(5);
                     e.target.value = `${year}-${monthDay}`;
                 }
             });
@@ -602,9 +598,9 @@ function applySignedInput(answerContainer, options) {
     let inp = content.querySelector('#signed_input_' + idSuffix);
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     if (input.value) {
-        if (input.value.startsWith('9999999')) 
+        if (input.value.startsWith('9999999'))
             inp.value = input.value.replace('9999999', '')
-        else{
+        else {
             let val = getFloat(input.value);
             if (!isNaN(val) && val > 0 && input.value.indexOf('+' == -1)) inp.value = '+' + formatFloat(val)
             else inp.value = input.value;
@@ -643,7 +639,7 @@ function applyNumericInput(answerContainer, options) {
         if ('maximum' in options) inp.max = options.maximum;
         if ('decimalDigits' in options) inp.step = getNumericStep(options.decimalDigits);
     }
-    if (input.value) inp.value = formatNumeric(input.value,{'decimalDigits':options?.decimalDigits});
+    if (input.value) inp.value = formatNumeric(input.value, { 'decimalDigits': options?.decimalDigits });
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     formatCorrectAnswer(answerContainer, 'numeric', options);
     const form = content.closest('#responseform');
