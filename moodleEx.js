@@ -229,15 +229,30 @@ function formatFloat(value, fractionDigits = 4) {
     let n = Math.pow(10, fractionDigits)
     return '' + Math.round(v * n) / n;
 }
-function formatPosition(value, type) {
+function formatPosition(value, type, options) {
     if (!isPosition(type)) return '?' + value;
+    let v = getFloat(value);
+    if (isNaN(v)) return '?' + value;
     let letter = positionLetter(type),
-        v = getFloat(value),
         sgn = (v < 0) ? letter.negative : letter.positive;
     v = Math.abs(v);
     let deg = Math.floor(v),
-        mins = (Math.round((v - deg) * 600) / 10).toFixed(1).padStart(4, '0');
+        decimalMinutes = options?.decimalMinutes || true,
+        mins = (Math.round((v - deg) * 600) / 10).toFixed(decimalMinutes ? 1 : 0).padStart(decimalMinutes ? 4 : 2, '0');
     return deg + '°' + mins + '\'' + sgn;
+}
+function formatAngle(value,options) {
+    let v = getFloat(value);
+    if (isNaN(v)) return '?' + value;
+    let sgn = '';
+    if (options?.allowNegative) {
+        if (v < 0) sgn = '-';
+        v = Math.abs(v);
+    } else v = normalizeAngle(v);
+    let deg = Math.floor(v),
+        decimalMinutes = options?.decimalMinutes || true,
+        mins = (Math.round((v - deg) * 600) / 10).toFixed(decimalMinutes ? 1 : 0).padStart(decimalMinutes ? 4 : 2, '0');
+    return sgn + deg + '°' + mins + '\'';
 }
 function getDirectionFormat(type, value) {
     let v = getFloat(value);
