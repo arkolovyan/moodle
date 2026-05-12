@@ -219,6 +219,7 @@ function formatValue(value, type, options) {
     else if (isDirection(type)) return formatDirection(value, type, options)
     else if (type == 'signed') return formatSigned(value, options)
     else if (type == 'numeric') return formatNumeric(value, options)
+    else if (type == 'angle') return formatAngle(value, options)
     else if (type == 'date') return formatDate(value, options)
     else if (type == 'time') return formatTime(value, options);
 }
