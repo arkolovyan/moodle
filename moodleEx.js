@@ -640,7 +640,7 @@ function applyNumericInput(answerContainer, options) {
     let input = answerContainer.querySelector('input');
     if (!input) return;
     input.style.setProperty('display', 'none', 'important');
-    let numeric_input_html = "<input id='numeric_input_idSuffix' size='30' type='numeric' style='width:30%; text-align: right' class='form-control d-inline'>",
+    let numeric_input_html = "<input id='numeric_input_idSuffix' size='30' type='number' inputmode='numeric' style='width:40%; text-align: right' class='form-control d-inline'>",
         idSuffix = randomId(),
         units = options?.units || '';
     input.insertAdjacentHTML('beforebegin', numeric_input_html.replace('idSuffix', idSuffix));
@@ -651,8 +651,6 @@ function applyNumericInput(answerContainer, options) {
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
     let inp = content.querySelector('#numeric_input_' + idSuffix);
-    inp.type='number';
-    inp.setAttribute('inputmode','numeric');
     if (options) {
         if ('minimum' in options) inp.min = options.minimum;
         if ('maximum' in options) inp.max = options.maximum;
