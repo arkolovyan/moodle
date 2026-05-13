@@ -651,13 +651,13 @@ function applyNumericInput(answerContainer, options) {
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
     let inp = content.querySelector('#numeric_input_' + idSuffix);
-    inp.inputMode='numeric';
+    inp.setAttribute('inputmode','numeric');
     if (options) {
         if ('minimum' in options) inp.min = options.minimum;
         if ('maximum' in options) inp.max = options.maximum;
         if ('decimalDigits' in options) {
             inp.step = getNumericStep(options.decimalDigits);
-            if(options.decimalDigits>0) inp.inputMode='decimal';
+            if(options.decimalDigits>0) inp.setAttribute('inputmode','decimal');
         }
     }
     if (input.value) inp.value = formatNumeric(input.value, { 'decimalDigits': options?.decimalDigits });
