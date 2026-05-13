@@ -651,6 +651,7 @@ function applyNumericInput(answerContainer, options) {
             input.insertAdjacentHTML('beforebegin', "<span>" + units + "</span>");
     }
     let inp = content.querySelector('#numeric_input_' + idSuffix);
+    inp.type='number';
     inp.setAttribute('inputmode','numeric');
     if (options) {
         if ('minimum' in options) inp.min = options.minimum;
