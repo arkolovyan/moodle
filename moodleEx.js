@@ -655,8 +655,15 @@ function applyNumericInput(answerContainer, options) {
         if ('minimum' in options) inp.min = options.minimum;
         if ('maximum' in options) inp.max = options.maximum;
         if ('decimalDigits' in options) {
-            inp.step = getNumericStep(options.decimalDigits);
-            if(options.decimalDigits>0) inp.setAttribute('inputmode','decimal');
+            let n = options.decimalDigits;
+            inp.step = getNumericStep(n);
+            if (n > 0) {
+                inp.setAttribute('inputmode', 'decimal');
+                inp.addEventListener('change', (e) => {
+                    const value = getFloat(e.target.value);
+                    if (!isNaN(value)) e.target.value = value.toFixed(n);
+                });
+            }
         }
     }
     if (input.value) inp.value = formatNumeric(input.value, { 'decimalDigits': options?.decimalDigits });
