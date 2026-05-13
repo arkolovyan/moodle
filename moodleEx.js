@@ -660,7 +660,6 @@ function applyNumericInput(answerContainer, options) {
             if(options.decimalDigits>0) inp.inputMode='decimal';
         }
     }
-    alert(inp.inputmode);
     if (input.value) inp.value = formatNumeric(input.value, { 'decimalDigits': options?.decimalDigits });
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     formatCorrectAnswer(answerContainer, 'numeric', options);
