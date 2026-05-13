@@ -22,8 +22,9 @@ function appendStyle(selector, style, value) {
         el.style.cssText += style + ':' + value;
     }
 }
-function appendStyles(selector, styles) {
-    const elements = document.querySelectorAll(selector);
+function appendStyles(selector, styles, owner) {
+    if(!owner) owner = document;
+    const elements = owner.querySelectorAll(selector);
     for (const el of elements) {
         el.style.cssText += styles;
     }
