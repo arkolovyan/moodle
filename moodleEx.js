@@ -296,8 +296,9 @@ function formatSigned(value, options) {
     let v = getFloat(value);
     if (isNaN(v)) return '' + value;
     let units = options?.units || '',
-        digits = options?.decimalDigits || 4;
-    return (v > 0) ? '+' + formatFloat(v, digits) + units : formatFloat(v, digits) + units;
+        digits = options?.decimalDigits || -1,
+        val = (digits>-1) ? v.toFixed(digits) : formatFloat(v,4);
+    return (v > 0) ? '+' + val + units : val + units;
 }
 function formatTime(value, options) {
     let v = parseInt(value);
