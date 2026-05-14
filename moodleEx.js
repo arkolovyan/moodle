@@ -358,7 +358,7 @@ function formatCorrectAnswer(answerContainer, type, options) {
             if(options?.replaceMinus){
                 const elements = content.querySelectorAll('.' + options.replaceMinus);
                     for (const el of elements) {
-                        el.innerHTML = el.innerHTML.replace(/(\d)-(\d)/g, '$1&minus;$2');
+                        el.innerHTML = el.innerHTML.replaceAll('-', '&minus;');
                     }
             }
         }
