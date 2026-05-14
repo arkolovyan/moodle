@@ -235,6 +235,7 @@ function formatPosition(value, type, options) {
     if (!isPosition(type)) return '?' + value;
     let v = getFloat(value);
     if (isNaN(v)) return '?' + value;
+    if (type == 'longitude' || type == 'deltaLon') v = normalizeLongitude(v);
     let letter = positionLetter(type),
         sgn = (v < 0) ? letter.negative : letter.positive;
     v = Math.abs(v);
