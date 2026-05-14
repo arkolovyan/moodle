@@ -355,6 +355,12 @@ function formatCorrectAnswer(answerContainer, type, options) {
             let s = rightAnswer.innerText,
                 pos = s.indexOf(':') + 2;
             rightAnswer.innerText = s.substring(0, pos) + formatValue(s.substring(pos), type, options);
+            if(options?.replaceMinus){
+                const elements = content.querySelectorAll('.' + options.replaceMinus);
+                    for (const el of elements) {
+                        el.innerHTML = el.innerHTML.replace('-','&minus;');
+                    }
+            }
         }
     }
 }
