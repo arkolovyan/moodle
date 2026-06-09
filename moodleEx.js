@@ -206,6 +206,11 @@ function getNumericStep(decimalDigits) {
     d *= -1;
     return Math.pow(10, d);
 }
+function updateElement(element){
+    element.style.display = 'none';
+    element.offsetHeight; 
+    element.style.display = '';
+}
 //#endregion
 
 //#region ************* Formatting ************
@@ -350,6 +355,7 @@ function formatCorrectAnswer(answerContainer, type, options) {
             end = bsContent.indexOf('<', start),
             str_val = bsContent.substring(start, end);
         popUp.setAttribute('data-bs-content', bsContent.replace(str_val, ' ' + formatValue(str_val, type, options)));
+        updateElement(popUp);
     } else {
         const rightAnswer = content.querySelector('div.rightanswer');
         if (rightAnswer) {
