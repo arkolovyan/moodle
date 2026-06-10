@@ -590,8 +590,8 @@ function applyDateInput(answerContainer, options) {
     if (options) {
         if ('year' in options) {
             const year = options.year;
-            inp.min = '${year}-01-01';
-            inp.max = '${year}-12-31';
+            inp.min = year + '-01-01';
+            inp.max = year + '-12-31';
             inp.value = inp.min;
             inp.addEventListener('change', (e) => {
                 const selectedDate = new Date(e.target.value);
@@ -602,7 +602,7 @@ function applyDateInput(answerContainer, options) {
             });
         }
     }
-    if (input.value) inp.value = formatDate(input.value, { 'dateFormat': 'iso' });
+    if (input.value & input.value>0) inp.value = formatDate(input.value, { 'dateFormat': 'iso' });
     if (input.getAttribute('readonly') || input.disabled) inp.disabled = true;
     formatCorrectAnswer(answerContainer, 'date', options);
     const form = content.closest('#responseform');
