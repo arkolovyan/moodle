@@ -318,7 +318,7 @@ function formatTime(value, options) {
     return twoDigits(hours) + separator + twoDigits(mins);
 }
 function twoDigits(v){
-    return String(hours).padStart(2, '0');
+    return String(v).padStart(2, '0');
 }
 function formatDate(value, options) {
     let v = getFloat(value),
