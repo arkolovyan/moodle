@@ -314,7 +314,11 @@ function formatTime(value, options) {
         mins = Math.floor((v - hours * 3600) / 60),
         seconds = v % 60;
     if(showSeconds) return twoDigits(hours) + separator + twoDigits(mins) + separator + twoDigits(seconds);
-    mins=Math.round(mins+seconds/60);
+    mins = Math.round(mins + seconds/60);
+    if(mins == 60){
+        hours +=1;
+        mins = 0;
+    }
     return twoDigits(hours) + separator + twoDigits(mins);
 }
 function twoDigits(v){
