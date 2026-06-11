@@ -307,14 +307,18 @@ function formatSigned(value, options) {
 }
 function formatTime(value, options) {
     let v = parseInt(value);
-    if (isNaN(v) || v < 0 || v > 86399) return '' + value;
+    if (isNaN(v) || v < 0 || v > 86400) return '' + value;
     let separator = options?.separator || ':',
-        seconds = options?.seconds || false;
+        showSeconds = options?.seconds || false;
     let hours = Math.floor(v / 3600),
         mins = Math.floor((v - hours * 3600) / 60),
-        ret = String(hours).padStart(2, '0') + separator + String(mins).padStart(2, '0');
-    if (seconds) ret += separator + String(v % 60).padStart(2, '0');
-    return ret;
+        seconds = v % 60;
+    if(showSeconds) return twoDigits(hours) + separator + twoDigits(mins) + separator + twoDigits(seconds);
+    mins=Math.round(mins+seconds/60);
+    return twoDigits(hours) + separator + twoDigits(mins);
+}
+function twoDigits(v){
+    return String(hours).padStart(2, '0');
 }
 function formatDate(value, options) {
     let v = getFloat(value),
