@@ -307,17 +307,19 @@ function formatSigned(value, options) {
 }
 function formatTime(value, options) {
     let v = parseInt(value);
-    if (isNaN(v) || v < 0 || v > 86400) return '' + value;
+    if (isNaN(v) || v < 0 || v > 86399) return '' + value;
     let separator = options?.separator || ':',
         showSeconds = options?.seconds || false;
     let hours = Math.floor(v / 3600),
         mins = Math.floor((v - hours * 3600) / 60),
         seconds = v % 60;
     if(showSeconds) return twoDigits(hours) + separator + twoDigits(mins) + separator + twoDigits(seconds);
-    mins = Math.round(mins + seconds/60);
-    if(mins == 60){
-        hours +=1;
-        mins = 0;
+    if (v < 86340){
+       mins = Math.round(mins + seconds/60);
+       if(mins == 60){
+           hours +=1;
+           mins = 0;
+       }
     }
     return twoDigits(hours) + separator + twoDigits(mins);
 }
